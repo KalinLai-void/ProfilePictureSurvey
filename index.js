@@ -5,17 +5,28 @@ var jsPsych = initJsPsych({
   on_finish: function () {
     jsPsych.setProgressBar(1);
     console.log(jsPsych.data.get().json());
-    var content = document.querySelector("#jspsych-content");
-    if (content) {
-      content.innerHTML = `
-        <section class="experiment-copy">
-          <h2>問卷結束</h2>
-          <p>感謝您的填答。</p>
-        </section>
-      `;
-    }
+    showCompletionScreen();
+    setTimeout(showCompletionScreen, 100);
   },
 });
+
+function showCompletionScreen() {
+  var content = document.querySelector("#jspsych-content");
+  var display = document.querySelector(".jspsych-display-element");
+  var html = `
+    <section class="completion-screen">
+      <h2>問卷填寫完畢</h2>
+      <p>感謝您的填答，資料已成功送出。</p>
+      <p>您現在可以安心關閉此頁面。</p>
+    </section>
+  `;
+
+  if (content) {
+    content.innerHTML = html;
+  } else if (display) {
+    display.innerHTML = '<div id="jspsych-content">' + html + "</div>";
+  }
+}
 
 var imgLogo = "images/logo.jpg";
 var chatNoAvatar = "images/chat_layout_none.jpg";
@@ -229,7 +240,7 @@ timeline.push({
   preamble: "<h2>第四階段：頭貼必要性</h2>",
   html: `
     <div class="form-panel">
-      <fieldset>
+      <fieldset class="binary-options">
         <legend>我認為客服系統的頭貼有存在的必要（是/否）</legend>
         <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
         <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
@@ -292,7 +303,6 @@ function rankingRows(prefix, rankSet) {
       return `
         <div class="ranking-row">
           <img src="${item.path}" alt="${item.label}">
-          <span>${item.label}</span>
           ${rankingSelect(prefix + "_" + index, rankSet)}
         </div>
       `;
