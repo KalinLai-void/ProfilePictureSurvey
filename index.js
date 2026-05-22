@@ -196,7 +196,7 @@ timeline.push({
       </label>
 
       <fieldset class="checkbox-options">
-        <legend>相關背景</legend>
+        <legend>相關背景 （可複選）</legend>
         <label><input type="checkbox" name="related_background" value="design_visual_ux"> 設計 / 視覺 / UX 相關</label>
         <label><input type="checkbox" name="related_background" value="tech_it_ai"> 資訊 / 科技 / AI 相關</label>
         <label><input type="checkbox" name="related_background" value="game_anime_content"> 遊戲 / 動漫 / 內容創作相關</label>
@@ -516,13 +516,13 @@ timeline.push({
   html: `
     <div class="ranking-grid">
       <section>
-        <p>請根據 Aethoria Infinite 作為一家「娛樂科技大廠」的品牌背景，將以下五個客服頭貼，依據「最符合該品牌形象」到「最不符合」進行名次排序。</p>
+        <p>請根據 Aethoria Infinite 作為一家<strong>「娛樂科技大廠」</strong>的品牌背景，將以下五個客服頭貼，<strong>依據「最符合該品牌形象」到「最不符合」進行名次排序</strong>。</p>
         <p>（1為最符合；5為最不符合）</p>
         ${rankingRows("brand_fit_rank", "brand_fit")}
       </section>
 
       <section>
-        <p>請想像您目前在該系統遇到了「帳號儲值失敗」或「演唱會票務異常」的緊急問題需要協助。請將以下五個客服頭貼，依據「最能讓您感到安心、且最願意向其諮詢」的程度進行名次排序。</p>
+        <p>請想像您目前在該系統遇到了「帳號儲值失敗」或「演唱會票務異常」的<strong>緊急問題需要協助</strong>。請將以下五個客服頭貼，<strong>依據「最能讓您感到安心、且最願意向其諮詢」的程度進行名次排序</strong>。</p>
         <p>（1為最安心；5為最不安心）</p>
         ${rankingRows("trust_rank", "trust")}
       </section>
@@ -541,7 +541,7 @@ timeline.push({
   html: `
     <div class="form-panel">
       <fieldset class="binary-options">
-        <legend>我認為客服系統/聊天機器人的頭貼有存在的必要</legend>
+        <legend>你認為客服系統/聊天機器人的頭貼是否有存在的必要？</legend>
         <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
         <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
       </fieldset>
@@ -559,19 +559,31 @@ timeline.push({
 });
 
 timeline.push({
-  type: jsPsychHtmlKeyboardResponse,
+  type: jsPsychHtmlButtonResponse,
   stimulus: `
     <section class="completion-screen">
       <h2>問卷填寫完畢</h2>
       <p>感謝您的填答，您已完成所有問卷內容。</p>
-      <p>系統正在送出資料並結束問卷，請稍候。</p>
-      <p>若稍後畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
+      <p>請按下方按鈕送出資料並結束問卷。</p>
+      <p>送出後若畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
     </section>
   `,
-  choices: "NO_KEYS",
-  trial_duration: 2500,
+  choices: ["送出並結束問卷"],
   on_load: function () {
     jsPsych.setProgressBar(1);
+    window.completionAutoFinishTimer = setTimeout(function () {
+      try {
+        jsPsych.finishTrial({ auto_submitted: true });
+      } catch (error) {
+        console.warn("Completion auto finish skipped:", error);
+      }
+    }, 10000);
+  },
+  on_finish: function () {
+    if (window.completionAutoFinishTimer) {
+      clearTimeout(window.completionAutoFinishTimer);
+      window.completionAutoFinishTimer = null;
+    }
   },
   data: { stage: "completion_confirmation" },
 });
