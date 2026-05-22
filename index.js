@@ -36,6 +36,17 @@ var allAvatars = Object.keys(avatarPools).flatMap(function (group) {
 
 var timeline = [];
 
+function flattenResponseData(data) {
+  if (!data.response) {
+    return;
+  }
+
+  Object.keys(data.response).forEach(function (key) {
+    var value = data.response[key];
+    data[key] = Array.isArray(value) ? value.join(",") : value;
+  });
+}
+
 function enableBackgroundValidation() {
   var form = document.querySelector("#jspsych-survey-html-form");
   var warning = document.createElement("p");
@@ -58,6 +69,9 @@ function enableBackgroundValidation() {
   );
   var boxes = Array.from(
     document.querySelectorAll('input[name="related_background"]'),
+  );
+  var selectedBackgroundInput = document.querySelector(
+    'input[name="related_background_selected"]',
   );
 
   warning.className = "form-warning";
@@ -85,6 +99,20 @@ function enableBackgroundValidation() {
   if (occupationSelect) {
     occupationSelect.addEventListener("change", updateOccupationOtherField);
     updateOccupationOtherField();
+  }
+
+  function updateSelectedBackgroundValue() {
+    var selectedValues = boxes
+      .filter(function (item) {
+        return item.checked;
+      })
+      .map(function (item) {
+        return item.value;
+      });
+
+    if (selectedBackgroundInput) {
+      selectedBackgroundInput.value = selectedValues.join(",");
+    }
   }
 
   function updateBackgroundOtherField() {
@@ -118,10 +146,12 @@ function enableBackgroundValidation() {
         return item.checked;
       });
       updateBackgroundOtherField();
+      updateSelectedBackgroundValue();
     });
   });
 
   updateBackgroundOtherField();
+  updateSelectedBackgroundValue();
 
   if (form) {
     form.addEventListener(
@@ -134,6 +164,8 @@ function enableBackgroundValidation() {
           event.preventDefault();
           event.stopImmediatePropagation();
           warning.hidden = false;
+        } else {
+          updateSelectedBackgroundValue();
         }
       },
       true,
@@ -230,6 +262,7 @@ timeline.push({
   button_label: "下一步",
   data: { stage: "demographics_and_prior_knowledge" },
   on_load: enableBackgroundValidation,
+  on_finish: flattenResponseData,
 });
 
 timeline.push({
@@ -324,14 +357,15 @@ timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
     <h2>無頭貼對話內容</h2>
-    <p>請觀看對話內容，並填寫實驗設計的量表</p>
     <div class="stimulus-frame">
       <img src="${chatNoAvatar}" alt="沒頭貼的對話內容">
     </div>
+    <p>請觀看對話內容，並填寫以下實驗設計的量表</p>
   `,
   questions: withScale(noAvatarScaleQuestions),
   button_label: "下一步",
   data: { stage: "no_avatar_rating", avatar_condition: "none" },
+  on_finish: flattenResponseData,
 });
 
 var selectedAvatarItem = jsPsych.randomization.sampleWithoutReplacement(
@@ -345,11 +379,11 @@ timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
     <h2>有頭貼對話內容</h2>
-    <p>請觀看對話內容，並填寫實驗設計的量表</p>
     <div class="chat-composite">
       <img class="chat-layout" src="${chatWithAvatar}" alt="有頭貼的對話內容">
       <img class="chat-avatar" src="${selectedAvatar}" alt="客服頭貼">
     </div>
+    <p>請觀看對話內容，並填寫以下實驗設計的量表</p>
   `,
   questions: withScale(avatarScaleQuestions),
   button_label: "下一步",
@@ -359,6 +393,7 @@ timeline.push({
     avatar_condition_label: groupLabels[selectedAvatarGroup],
     avatar_path: selectedAvatar,
   },
+  on_finish: flattenResponseData,
 });
 
 function pickRankingImages() {
@@ -429,6 +464,8 @@ function buildRankingTrialData() {
 }
 
 function addRankingResponseMetadata(data) {
+  flattenResponseData(data);
+
   var response = data.response || {};
   var rankSets = [
     { key: "brand_fit", prefix: "brand_fit_rank" },
@@ -510,6 +547,30 @@ function enableRankingValidation() {
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
+  preamble: "<h2>頭貼必要性</h2>",
+  html: `
+    <div class="form-panel">
+      <fieldset class="binary-options">
+        <legend>你認為客服系統/聊天機器人的頭貼是否有存在的必要？</legend>
+        <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
+        <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
+      </fieldset>
+
+      <label>（非必填）請說明客服/聊天機器人的頭貼是否影響你對品牌的印象或互動意願？
+        <textarea name="avatar_interaction_reason" rows="4"></textarea>
+      </label>
+      <label>（非必填）請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。
+        <textarea name="avatar_ranking_reason" rows="4"></textarea>
+      </label>
+    </div>
+  `,
+  button_label: "下一步",
+  data: { stage: "avatar_necessity" },
+  on_finish: flattenResponseData,
+});
+
+timeline.push({
+  type: jsPsychSurveyHtmlForm,
   preamble: `
     <h2>指標偏好排序</h2>
   `,
@@ -537,49 +598,27 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>頭貼必要性</h2>",
+  preamble: "",
   html: `
-    <div class="form-panel">
-      <fieldset class="binary-options">
-        <legend>你認為客服系統/聊天機器人的頭貼是否有存在的必要？</legend>
-        <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
-        <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
-      </fieldset>
-
-      <label>（非必填）請說明客服/聊天機器人的頭貼是否影響你對品牌的印象或互動意願？
-        <textarea name="avatar_interaction_reason" rows="4"></textarea>
-      </label>
-      <label>（非必填）請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。
-        <textarea name="avatar_ranking_reason" rows="4"></textarea>
-      </label>
-    </div>
-  `,
-  button_label: "下一步",
-  data: { stage: "avatar_necessity" },
-});
-
-timeline.push({
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `
     <section class="completion-screen">
-      <h2>問卷填寫完畢</h2>
-      <p>感謝您的填答，您已完成所有問卷內容。</p>
-      <p>請按下方按鈕送出資料並結束問卷。</p>
-      <p>送出後若畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
+      <h2>??????</h2>
+      <p>??????????????????</p>
+      <p>????????????????</p>
+      <p>???????????????????????????????</p>
     </section>
   `,
-  choices: ["送出並結束問卷"],
+  button_label: "???????",
   on_load: function () {
     jsPsych.setProgressBar(1);
     window.completionAutoFinishTimer = setTimeout(function () {
-      try {
-        jsPsych.finishTrial({ auto_submitted: true });
-      } catch (error) {
-        console.warn("Completion auto finish skipped:", error);
+      var button = document.querySelector("#jspsych-survey-html-form-next");
+      if (button) {
+        button.click();
       }
     }, 10000);
   },
-  on_finish: function () {
+  on_finish: function (data) {
+    data.completion_submitted = true;
     if (window.completionAutoFinishTimer) {
       clearTimeout(window.completionAutoFinishTimer);
       window.completionAutoFinishTimer = null;
