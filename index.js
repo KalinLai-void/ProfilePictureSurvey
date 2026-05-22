@@ -1,3 +1,4 @@
+var jsPsychSortableHtml = window.jsPsychSortableHtml;
 var jsPsych = initJsPsych({
   on_finish: function () {
     // 實驗結束
