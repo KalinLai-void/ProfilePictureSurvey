@@ -46,49 +46,6 @@ var allAvatars = Object.keys(avatarPools).flatMap(function (group) {
 
 var timeline = [];
 
-// ==========================================
-// 全域監聽器：每填寫一題，微調進度條 (Micro-Progress)
-// ==========================================
-document.addEventListener("change", function (e) {
-  var content = document.getElementById("jspsych-content");
-  // 確保事件是發生在 jsPsych 的問卷內容區塊內
-  if (!content || !content.contains(e.target)) return;
-
-  // 1. 取得 jsPsych 目前的整體進度資訊
-  var progress = jsPsych.getProgress();
-  // 基礎進度：目前所在頁面之前的總進度
-  var baseProgress = progress.current_trial_global / progress.total_trials;
-  // 每一頁（Trial）佔整份問卷的進度比例
-  var chunk = 1 / progress.total_trials;
-
-  // 2. 抓出這一頁裡面所有的「輸入題」 (Radio, Select, Textarea)
-  var inputs = content.querySelectorAll(
-    'input[type="radio"], input[type="checkbox"], select, textarea',
-  );
-  var uniqueNames = new Set();
-  inputs.forEach((i) => {
-    if (i.name) uniqueNames.add(i.name);
-  });
-
-  var totalQuestions = uniqueNames.size;
-  if (totalQuestions === 0) return; // 如果這頁沒有標準表單題目，直接跳出
-
-  // 3. 計算這頁目前「已經作答」的題數
-  var answeredCount = 0;
-  uniqueNames.forEach((name) => {
-    var elements = content.querySelectorAll(`[name="${name}"]`);
-    var isAnswered = Array.from(elements).some((el) => {
-      if (el.type === "radio" || el.type === "checkbox") return el.checked; // 選擇題有勾選
-      return el.value.trim() !== ""; // 文字框有內容
-    });
-    if (isAnswered) answeredCount++;
-  });
-
-  // 4. 計算並更新微進度：基礎進度 + (已答題比例 * 單頁佔比)
-  var microProgress = baseProgress + (answeredCount / totalQuestions) * chunk;
-  jsPsych.setProgressBar(microProgress);
-});
-
 function flattenResponseData(data) {
   if (!data.response) {
     return;
