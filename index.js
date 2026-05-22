@@ -60,13 +60,24 @@ var chatNoAvatar = "images/chat_layout_none.jpg";
 var chatWithAvatar = "images/chat_layout_avatar.jpg";
 
 var avatarPools = {
-  mascot: ["images/mascot_1.jpg", "images/mascot_2.jpg", "images/mascot_3.jpg"],
+  mascot: [
+    "images/mascot_1.jpg",
+    "images/mascot_2.jpg",
+    "images/mascot_3.jpg",
+    "images/mascot_4.jpg",
+  ],
   virtual: [
     "images/virtual_1.jpg",
     "images/virtual_2.jpg",
     "images/virtual_3.jpg",
+    "images/virtual_4.jpg",
   ],
-  human: ["images/human_1.jpg", "images/human_2.jpg", "images/human_3.jpg"],
+  human: [
+    "images/human_1.jpg",
+    "images/human_2.jpg",
+    "images/human_3.jpg",
+    "images/human_4.jpg",
+  ],
 };
 
 var groupLabels = {
