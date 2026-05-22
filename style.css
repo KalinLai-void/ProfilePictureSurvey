@@ -270,6 +270,18 @@ textarea {
   list-style: none;
   margin: 0 0 18px;
   padding: 0;
+  position: relative;
+}
+
+.jspsych-survey-likert-opts::before {
+  background: rgba(244, 246, 251, 0.88);
+  content: "";
+  height: 3px;
+  left: 10%;
+  position: absolute;
+  right: 10%;
+  top: 24px;
+  z-index: 0;
 }
 
 .jspsych-survey-likert-opts li {
@@ -278,6 +290,8 @@ textarea {
   justify-items: center;
   min-height: 86px;
   padding: 12px 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .jspsych-survey-likert-opts li:last-child {
@@ -285,9 +299,12 @@ textarea {
 }
 
 .jspsych-survey-likert-opts input {
+  background: var(--panel-soft);
   height: 24px;
   margin: 0 0 10px;
   width: 24px;
+  position: relative;
+  z-index: 2;
 }
 
 .jspsych-survey-likert-opts .jspsych-survey-likert-opt-label,
@@ -402,6 +419,10 @@ textarea {
 
   .jspsych-survey-likert-opts {
     grid-template-columns: 1fr;
+  }
+
+  .jspsych-survey-likert-opts::before {
+    display: none;
   }
 
   .jspsych-survey-likert-opts li {

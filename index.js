@@ -3,7 +3,17 @@ var jsPsych = initJsPsych({
   auto_update_progress_bar: true,
   message_progress_bar: "實驗進度",
   on_finish: function () {
+    jsPsych.setProgressBar(1);
     console.log(jsPsych.data.get().json());
+    var content = document.querySelector("#jspsych-content");
+    if (content) {
+      content.innerHTML = `
+        <section class="experiment-copy">
+          <h2>問卷結束</h2>
+          <p>感謝您的填答。</p>
+        </section>
+      `;
+    }
   },
 });
 
@@ -12,11 +22,7 @@ var chatNoAvatar = "images/chat_layout_none.jpg";
 var chatWithAvatar = "images/chat_layout_avatar.jpg";
 
 var avatarPools = {
-  mascot: [
-    "images/mascot_1.jpg",
-    "images/mascot_2.jpg",
-    "images/mascot_3.jpg",
-  ],
+  mascot: ["images/mascot_1.jpg", "images/mascot_2.jpg", "images/mascot_3.jpg"],
   virtual: [
     "images/virtual_1.jpg",
     "images/virtual_2.jpg",
@@ -53,7 +59,7 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>第一階段：人口統計與先備知識</h2>",
+  preamble: "<h2>第一階段：基本資料調查</h2>",
   html: `
     <div class="form-panel">
       <label>生理性別
@@ -61,27 +67,28 @@ timeline.push({
           <option value="">請選擇</option>
           <option value="male">男</option>
           <option value="female">女</option>
-          <option value="other">其他 / 不便透露</option>
         </select>
       </label>
 
       <label>年齡層
         <select name="age" required>
-          <option value="">請選擇</option>
           <option value="under18">18歲以下</option>
           <option value="18-24">18-24歲</option>
-          <option value="25-34">25-34歲</option>
-          <option value="35up">35歲以上</option>
+          <option value="25-29">25-29歲</option>
+          <option value="30-34">30-34歲</option>
+          <option value="35-39">35-39歲</option>
+          <option value="40-44">40-44歲</option>
+          <option value="45up">45歲以上</option>
         </select>
       </label>
 
       <fieldset class="score-options">
-        <legend>您平時是否有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣？（1~5分）</legend>
-        <label><input type="radio" name="acg_habit" value="1" required> 1</label>
-        <label><input type="radio" name="acg_habit" value="2"> 2</label>
-        <label><input type="radio" name="acg_habit" value="3"> 3</label>
-        <label><input type="radio" name="acg_habit" value="4"> 4</label>
-        <label><input type="radio" name="acg_habit" value="5"> 5</label>
+        <legend>我平時是否有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣？</legend>
+        <label><input type="radio" name="acg_habit" value="1" required> 非常不符合我</label>
+        <label><input type="radio" name="acg_habit" value="2"> 不符合我</label>
+        <label><input type="radio" name="acg_habit" value="3"> 普通</label>
+        <label><input type="radio" name="acg_habit" value="4"> 符合我</label>
+        <label><input type="radio" name="acg_habit" value="5"> 非常符合我</label>
       </fieldset>
     </div>
   `,
@@ -89,13 +96,20 @@ timeline.push({
   data: { stage: "demographics_and_prior_knowledge" },
 });
 
-var likertScale = [
-  "非常不同意",
-  "不同意",
-  "普通",
-  "同意",
-  "非常同意",
-];
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <section class="experiment-copy">
+      <h2>前導情境</h2>
+      <p>Aethoria Infinite 是一家全球知名的娛樂科技公司，旗下擁有熱門的「賽博龐克動作遊戲」、「奇幻 MMORPG」與「AI 虛擬偶像」。</p>
+      <p>想像您是一位正在使用該公司旗下產品的用戶，您對公司即將舉辦的虛擬演唱會活動有些疑問，因此 尋求客服協助。接下來，您將會看到與該客服的對話紀錄……</p>
+    </section>
+  `,
+  choices: ["下一步"],
+  data: { stage: "scenario_intro" },
+});
+
+var likertScale = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
 
 var baseScaleQuestions = [
   {
@@ -347,7 +361,7 @@ function enableRankingValidation() {
 timeline.push({
   type: jsPsychSurveyHtmlForm,
   preamble: `
-    <h2>第四階段：偏好排序</h2>
+    <h2>第四階段：排序</h2>
     <p>無論您前一題的答案為何，若未來系統全面導入頭貼，請對以下選項進行偏好排序...</p>
   `,
   html: `
@@ -356,14 +370,14 @@ timeline.push({
     </p>
     <div class="ranking-grid">
       <section>
-        <h3>排序指標</h3>
-        <p>請根據 Aethoria Infinite 作為一家「娛樂科技大廠」的品牌背景，將以下五個客服頭貼，依據「最符合該品牌形象」到「最不符合」進行名次排序。（1為最符合；5為最不符合）</p>
+        <p>請根據 Aethoria Infinite 作為一家「娛樂科技大廠」的品牌背景，將以下五個客服頭貼，依據「最符合該品牌形象」到「最不符合」進行名次排序。</p>
+        <p>（1為最符合；5為最不符合）</p>
         ${rankingRows("brand_fit_rank", "brand_fit")}
       </section>
 
       <section>
-        <h3>排序指標</h3>
-        <p>請想像您目前在該系統遇到了「帳號儲值失敗」或「演唱會票務異常」的緊急問題需要協助。請將以下五個客服頭貼，依據「最能讓您感到安心、且最願意向其諮詢」的程度進行名次排序。（1為最安心；5為最不安心）</p>
+        <p>請想像您目前在該系統遇到了「帳號儲值失敗」或「演唱會票務異常」的緊急問題需要協助。請將以下五個客服頭貼，依據「最能讓您感到安心、且最願意向其諮詢」的程度進行名次排序。</p>
+        <p>（1為最安心；5為最不安心）</p>
         ${rankingRows("trust_rank", "trust")}
       </section>
     </div>
@@ -380,18 +394,6 @@ timeline.push({
     }),
   },
   on_load: enableRankingValidation,
-});
-
-timeline.push({
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: `
-    <section class="experiment-copy">
-      <h2>問卷結束</h2>
-      <p>感謝您的填答。</p>
-    </section>
-  `,
-  choices: "NO_KEYS",
-  data: { stage: "end" },
 });
 
 jsPsych.run(timeline);
