@@ -1,42 +1,12 @@
 var jsPsych = initJsPsych({
   show_progress_bar: true,
   auto_update_progress_bar: true,
-  message_progress_bar: "實驗進度",
+  message_progress_bar: "問卷進度",
   on_finish: function () {
     jsPsych.setProgressBar(1);
     console.log(jsPsych.data.get().json());
-    showCompletionScreen();
-    [100, 500, 1000, 2000].forEach(function (delay) {
-      setTimeout(showCompletionScreen, delay);
-    });
   },
 });
-
-function showCompletionScreen() {
-  var content = document.querySelector("#jspsych-content");
-  var display = document.querySelector(".jspsych-display-element");
-  var existingOverlay = document.querySelector("#completion-overlay");
-  var html = `
-    <section class="completion-screen">
-      <h2>問卷填寫完畢</h2>
-      <p>感謝您的填答，資料已成功送出。</p>
-      <p>您現在可以安心關閉此頁面。</p>
-    </section>
-  `;
-
-  if (!existingOverlay) {
-    var overlay = document.createElement("div");
-    overlay.id = "completion-overlay";
-    overlay.innerHTML = html;
-    document.body.appendChild(overlay);
-  }
-
-  if (content) {
-    content.innerHTML = html;
-  } else if (display) {
-    display.innerHTML = '<div id="jspsych-content">' + html + "</div>";
-  }
-}
 
 var imgLogo = "images/logo.jpg";
 var chatNoAvatar = "images/chat_layout_none.jpg";
@@ -419,9 +389,6 @@ timeline.push({
     <p>無論您前一題的答案為何，若未來系統全面導入頭貼，請對以下選項進行偏好排序...</p>
   `,
   html: `
-    <p class="ranking-note">
-      五個頭貼包括品牌LOGO一張，以及剩下四張從非品牌LOGO的有頭貼組抽選；同一組別的頭貼不抽超過2張。
-    </p>
     <div class="ranking-grid">
       <section>
         <p>請根據 Aethoria Infinite 作為一家「娛樂科技大廠」的品牌背景，將以下五個客服頭貼，依據「最符合該品牌形象」到「最不符合」進行名次排序。</p>
@@ -437,10 +404,27 @@ timeline.push({
     </div>
     <p id="ranking-warning" class="ranking-warning"></p>
   `,
-  button_label: "送出",
+  button_label: "下一步",
   data: Object.assign({ stage: "avatar_ranking" }, buildRankingTrialData()),
   on_load: enableRankingValidation,
   on_finish: addRankingResponseMetadata,
+});
+
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <section class="completion-screen">
+      <h2>問卷填寫完畢</h2>
+      <p>感謝您的填答，您已完成所有問卷內容。</p>
+      <p>請按下方按鈕送出資料並結束問卷。</p>
+      <p>按下後若畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
+    </section>
+  `,
+  choices: ["完成並送出"],
+  on_load: function () {
+    jsPsych.setProgressBar(1);
+  },
+  data: { stage: "completion_confirmation" },
 });
 
 jsPsych.run(timeline);
