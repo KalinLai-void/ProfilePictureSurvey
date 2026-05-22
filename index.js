@@ -250,57 +250,62 @@ var rank_options = final_5_avatars.map(
 
 // 拖曳排序核心)
 var stage4_rank = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function () {
-    var html = `
-    <style>
-        .rank-section { margin-bottom: 40px; }
-        .drag-container { display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 20px; background: #333; border-radius: 10px; }
-        .draggable { padding: 10px; background: #444; border: 1px solid #555; color: white; display: flex; align-items: center; cursor: grab; width: 300px; border-radius: 5px; }
-    </style>
-    <h3>第四階段：綜合評比</h3>
-    
-    <div class="rank-section">
-        <p style="color:#00e5ff;">【排序一：品牌契合度】(由上至下：最符合 → 最不符合)</p>
-        <div id="sort1" class="drag-container">
-            ${final_5_avatars.map((img, i) => `<div class="draggable" draggable="true" data-img="${img}"> <img src="${img}" width="40" style="margin-right:10px;"> 選項 ${i + 1}</div>`).join("")}
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+        <h3>綜合排序 (請拖曳圖片)</h3>
+        <div id="sortable-list" style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+            ${final_5_avatars
+              .map(
+                (img, i) => `
+                <div class="draggable" draggable="true" data-img="${img}" 
+                     style="padding:10px; border:2px solid #555; background:#444; width:250px; cursor:grab; border-radius:8px;">
+                     <img src="${img}" style="width:50px; vertical-align:middle; margin-right:10px;"> 選項 ${i + 1}
+                </div>
+            `,
+              )
+              .join("")}
         </div>
-    </div>
-
-    <div class="rank-section">
-        <p style="color:#ff00ff;">【排序二：安心與信任感】(由上至下：最安心 → 最不安心)</p>
-        <div id="sort2" class="drag-container">
-            ${final_5_avatars.map((img, i) => `<div class="draggable" draggable="true" data-img="${img}"> <img src="${img}" width="40" style="margin-right:10px;"> 選項 ${i + 1}</div>`).join("")}
-        </div>
-    </div>
-    <p>拖曳完成後，按「空白鍵」進入結束畫面。</p>
-    `;
-    return html;
-  },
+    `,
+  choices: ["完成排序並進入下一階段"],
   on_load: function () {
-    // 綁定兩組容器的拖曳邏輯
-    ["sort1", "sort2"].forEach((id) => {
-      const container = document.getElementById(id);
-      let draggingItem = null;
-      container.addEventListener("dragstart", (e) => {
-        draggingItem = e.target;
-      });
-      container.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        const after = getDragAfterElement(container, e.clientY);
-        if (after == null) container.appendChild(draggingItem);
-        else container.insertBefore(draggingItem, after);
-      });
+    const container = document.getElementById("sortable-list");
+    let draggingItem = null;
+
+    // 綁定事件
+    container.addEventListener("dragstart", (e) => {
+      draggingItem = e.target;
+      e.target.style.border = "2px dashed #00e5ff";
+    });
+
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const afterElement = [
+        ...container.querySelectorAll(".draggable:not(.dragging)"),
+      ].reduce(
+        (closest, child) => {
+          const box = child.getBoundingClientRect();
+          const offset = e.clientY - box.top - box.height / 2;
+          return offset < 0 && offset > closest.offset
+            ? { offset: offset, element: child }
+            : closest;
+        },
+        { offset: Number.NEGATIVE_INFINITY },
+      ).element;
+
+      if (afterElement == null) container.appendChild(draggingItem);
+      else container.insertBefore(draggingItem, afterElement);
+    });
+
+    container.addEventListener("dragend", (e) => {
+      e.target.style.border = "2px solid #555";
     });
   },
   on_finish: function (data) {
-    // 紀錄兩組最終順序
-    data.brand_fit_order = Array.from(
-      document.getElementById("sort1").children,
-    ).map((c) => c.getAttribute("data-img"));
-    data.trust_order = Array.from(
-      document.getElementById("sort2").children,
-    ).map((c) => c.getAttribute("data-img"));
+    // 抓取當前畫面上 div 的排列順序
+    var items = document.querySelectorAll(".draggable");
+    data.final_order = Array.from(items).map((item) =>
+      item.getAttribute("data-img"),
+    );
   },
 };
 timeline.push(stage4_rank);
