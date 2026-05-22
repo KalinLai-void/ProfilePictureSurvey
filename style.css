@@ -181,6 +181,10 @@ input:focus-visible {
   gap: 18px;
 }
 
+.conditional-field[hidden] {
+  display: none;
+}
+
 .form-panel label,
 .form-panel fieldset {
   display: grid;

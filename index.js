@@ -39,6 +39,11 @@ var timeline = [];
 function enableBackgroundValidation() {
   var form = document.querySelector("#jspsych-survey-html-form");
   var warning = document.createElement("p");
+  var occupationSelect = document.querySelector('select[name="occupation"]');
+  var occupationOtherField = document.querySelector("#occupation-other-field");
+  var occupationOtherInput = document.querySelector(
+    'input[name="occupation_other"]',
+  );
   var noneBox = document.querySelector(
     'input[name="related_background"][value="none"]',
   );
@@ -51,6 +56,26 @@ function enableBackgroundValidation() {
   warning.hidden = true;
   if (form) {
     form.appendChild(warning);
+  }
+
+  function updateOccupationOtherField() {
+    var shouldShow = occupationSelect && occupationSelect.value === "other";
+
+    if (occupationOtherField) {
+      occupationOtherField.hidden = !shouldShow;
+    }
+
+    if (occupationOtherInput) {
+      occupationOtherInput.required = shouldShow;
+      if (!shouldShow) {
+        occupationOtherInput.value = "";
+      }
+    }
+  }
+
+  if (occupationSelect) {
+    occupationSelect.addEventListener("change", updateOccupationOtherField);
+    updateOccupationOtherField();
   }
 
   boxes.forEach(function (box) {
@@ -103,7 +128,7 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>??????</h2>",
+  preamble: "<h2>基本資料</h2>",
   html: `
     <div class="form-panel">
       <label>生理性別
@@ -116,7 +141,16 @@ timeline.push({
       </label>
 
       <label>年齡
-        <input type="number" name="age" min="1" max="120" required>
+        <select name="age" required>
+          <option value="">請選擇</option>
+          <option value="under18">18歲以下</option>
+          <option value="18-24">18-24歲</option>
+          <option value="25-29">25-29歲</option>
+          <option value="30-34">30-34歲</option>
+          <option value="35-39">35-39歲</option>
+          <option value="40-44">40-44歲</option>
+          <option value="45up">45歲以上</option>
+        </select>
       </label>
 
       <label>職業 / 身份
@@ -130,6 +164,10 @@ timeline.push({
         </select>
       </label>
 
+      <label id="occupation-other-field" class="conditional-field" hidden>其他 / 不想透露
+        <input type="text" name="occupation_other">
+      </label>
+
       <fieldset class="checkbox-options">
         <legend>相關背景</legend>
         <label><input type="checkbox" name="related_background" value="design_visual_ux"> 設計 / 視覺 / UX 相關</label>
@@ -139,12 +177,8 @@ timeline.push({
         <label><input type="checkbox" name="related_background" value="other"> 其他</label>
       </fieldset>
 
-      <label>其他相關背景
-        <input type="text" name="related_background_other">
-      </label>
-
       <fieldset class="score-options">
-        <legend>我平時有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣</legend>
+        <legend>平時有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣</legend>
         <label><input type="radio" name="game_acg_frequency" value="1" required> 非常不符合我</label>
         <label><input type="radio" name="game_acg_frequency" value="2"> 不符合我</label>
         <label><input type="radio" name="game_acg_frequency" value="3"> 一般</label>
@@ -153,7 +187,7 @@ timeline.push({
       </fieldset>
 
       <fieldset class="score-options">
-        <legend>您平時使用聊天機器人的頻率如何？</legend>
+        <legend>平時使用聊天機器人的頻率如何？</legend>
         <label><input type="radio" name="chatbot_frequency" value="1" required> 非常不頻繁</label>
         <label><input type="radio" name="chatbot_frequency" value="2"> 不頻繁</label>
         <label><input type="radio" name="chatbot_frequency" value="3"> 一般</label>
@@ -162,7 +196,7 @@ timeline.push({
       </fieldset>
     </div>
   `,
-  button_label: "???",
+  button_label: "下一步",
   data: { stage: "demographics_and_prior_knowledge" },
   on_load: enableBackgroundValidation,
 });
