@@ -1,4 +1,3 @@
-var jsPsychSortableHtml = window.jsPsychSortableHtml;
 var jsPsych = initJsPsych({
   on_finish: function () {
     // 實驗結束
@@ -243,36 +242,45 @@ while (!valid_combo) {
 var final_5_avatars = [img_logo, ...selected_4_avatars];
 final_5_avatars = jsPsych.randomization.shuffle(final_5_avatars);
 
-// 排序 1 拖曳版 (使用 SortableHtml 外掛)
+// 生成拖曳排序的選項陣列
+var rank_options = final_5_avatars.map(
+  (img) =>
+    `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
+);
+
+// 排序 1：品牌契合度
 var stage4_rank1 = {
-  type: jsPsychSortableHtml,
+  type: jsPsychHtmlRankOrder,
   stimulus: `
         <p style="color:#A020F0; font-weight:bold;">【排序一：品牌契合度】</p>
-        <p>請將以下圖片拖曳排序（最符合放最上方）：</p>
+        <p>請將圖片拖曳至您認為「最符合該品牌形象」的順序（由上至下）：</p>
     `,
-  button_label: "確認排序",
-  options: final_5_avatars.map(
-    (img, idx) =>
-      `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
-  ),
-  on_finish: function (data) {
-    // Cognition.run 會自動記錄 data.order，即為排序後的陣列索引
-  },
+  choices: rank_options,
+  labels: [
+    "第 1 名 (最符合)",
+    "第 2 名",
+    "第 3 名",
+    "第 4 名",
+    "第 5 名 (最不符合)",
+  ],
 };
 timeline.push(stage4_rank1);
 
-// 排序 2 拖曳版
+// 排序 2：安心與信任感
 var stage4_rank2 = {
-  type: jsPsychSortableHtml,
+  type: jsPsychHtmlRankOrder,
   stimulus: `
-        <p style="color:#00FFFF; font-weight:bold; background-color:#333; display:inline-block; padding:5px;">【排序二：安心與信任感】</p>
-        <p>請將以下圖片拖曳排序（最讓您感到安心放最上方）：</p>
+        <p style="color:#00FFFF; font-weight:bold;">【排序二：安心與信任感】</p>
+        <p>請將圖片拖曳至您認為「最能讓您感到安心」的順序（由上至下）：</p>
     `,
-  button_label: "完成送出",
-  options: final_5_avatars.map(
-    (img, idx) =>
-      `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
-  ),
+  choices: rank_options,
+  labels: [
+    "第 1 名 (最安心)",
+    "第 2 名",
+    "第 3 名",
+    "第 4 名",
+    "第 5 名 (最不安心)",
+  ],
 };
 timeline.push(stage4_rank2);
 
