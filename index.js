@@ -18,6 +18,21 @@ var jsPsych = initJsPsych({
   },
 });
 
+// --- 設備與螢幕偵測模組 ---
+var isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
+var detectedDevice = isMobile ? "Mobile/Tablet" : "Desktop/Laptop";
+var screenRes = window.innerWidth + "x" + window.innerHeight; // 抓取當下瀏覽器視窗的實際可視範圍
+
+// 將偵測到的硬體資訊，強制寫入該受試者的每一筆資料中
+jsPsych.data.addProperties({
+  device_type: detectedDevice,
+  window_resolution: screenRes,
+});
+// ------------------------
+
 var imgLogo = "images/logo.jpg";
 var chatNoAvatar = "images/chat_layout_none.jpg";
 var chatWithAvatar = "images/chat_layout_avatar.jpg";
@@ -218,6 +233,28 @@ timeline.push({
           <option value="35-39">35-39歲</option>
           <option value="40-44">40-44歲</option>
           <option value="45up">45歲以上</option>
+        </select>
+      </label>
+
+      <label>教育程度
+        <select name="education" required>
+          <option value="">請選擇</option>
+          <option value="junior_school">高中以下</option>
+          <option value="high_school">高中</option>
+          <option value="bachelor">大學 / 專科</option>
+          <option value="master">碩士</option>
+          <option value="doctorate">博士</option>
+        </select>
+      </label>
+
+      <label>職業 / 身份
+        <select name="occupation" required>
+          <option value="">請選擇</option>
+          <option value="student">學生</option>
+          <option value="employee">上班族</option>
+          <option value="freelancer">自由職業者</option>
+          <option value="unemployed">未就業 / 待業</option>
+          <option value="other">其他</option>
         </select>
       </label>
 
