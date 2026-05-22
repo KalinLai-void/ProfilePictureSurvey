@@ -554,3 +554,17 @@ textarea {
     width: 46px;
   }
 }
+
+/* ==========================================
+   問卷進度條置頂設定 (Sticky Progress Bar)
+========================================== */
+#jspsych-progressbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  /* 使用你原本定義好的變數，確保風格一致 */
+  background-color: var(--page); 
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}

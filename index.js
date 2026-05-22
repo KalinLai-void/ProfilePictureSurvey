@@ -4,6 +4,17 @@ var jsPsych = initJsPsych({
   message_progress_bar: "問卷進度",
   on_finish: function () {
     console.log(jsPsych.data.get().json());
+
+    var displayElement = jsPsych.getDisplayElement();
+    displayElement.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; background-color: #1a1a1d; color: #e0e0e0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+        <h1 style="color: #00e5ff; margin-bottom: 10px;">✅ 資料已成功送出！</h1>
+        <p style="font-size: 18px; margin-bottom: 10px;">非常感謝您的參與，您的回覆對本研究非常有幫助。</p>
+        <div style="margin-top: 20px; padding: 15px 30px; background-color: #2b2b30; border-radius: 8px; border: 1px solid #444;">
+          <p style="color: #fff; font-size: 16px; margin: 0;">您現在可以安全地關閉此網頁分頁了。</p>
+        </div>
+      </div>
+    `;
   },
 });
 
@@ -607,22 +618,6 @@ timeline.push({
   `,
   choices: ["送出並結束問卷"],
   data: { stage: "completion_confirmation" },
-  on_load: function () {
-    // 保留你的 10 秒自動結束功能，但目標改為抓取 jsPsych 的預設按鈕 class
-    window.completionAutoFinishTimer = setTimeout(function () {
-      var button = document.querySelector(".jspsych-btn");
-      if (button) {
-        button.click();
-      }
-    }, 10000);
-  },
-  on_finish: function (data) {
-    data.completion_submitted = true;
-    if (window.completionAutoFinishTimer) {
-      clearTimeout(window.completionAutoFinishTimer);
-      window.completionAutoFinishTimer = null;
-    }
-  },
 });
 
 jsPsych.run(timeline);
