@@ -267,7 +267,6 @@ var stage4_combined = {
   `,
 };
 timeline.push(stage4_combined);
-timeline.push(stage4_rank);
 
 // ==========================================
 // 5. 結束畫面
