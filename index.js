@@ -248,66 +248,25 @@ var rank_options = final_5_avatars.map(
     `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
 );
 
-// 拖曳排序核心)
-var stage4_rank = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `
-        <h3>綜合排序 (請拖曳圖片)</h3>
-        <div id="sortable-list" style="display:flex; flex-direction:column; gap:10px; align-items:center;">
-            ${final_5_avatars
-              .map(
-                (img, i) => `
-                <div class="draggable" draggable="true" data-img="${img}" 
-                     style="padding:10px; border:2px solid #555; background:#444; width:250px; cursor:grab; border-radius:8px;">
-                     <img src="${img}" style="width:50px; vertical-align:middle; margin-right:10px;"> 選項 ${i + 1}
-                </div>
-            `,
-              )
-              .join("")}
+var stage4_combined = {
+  type: jsPsychSurveyHtmlForm,
+  preamble: "<h3>第四階段：綜合評比</h3>",
+  html: `
+    <div style="display:flex; gap:20px; text-align:center;">
+        <div>
+            <p>【品牌契合度排序】</p>
+            <p> 請根據 Aethoria Infinite 作為一家「娛樂科技大廠」的品牌背景，將以下五個客服頭貼，依據「最符合該品牌形象」到「最不符合」進行名次排序。（1為最符合；5為最不符合）</p>
+            ${final_5_avatars.map((img, i) => `<img src="${img}" width="50"><select name="rank1_${i}"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select><br>`).join("")}
         </div>
-    `,
-  choices: ["完成排序並進入下一階段"],
-  on_load: function () {
-    const container = document.getElementById("sortable-list");
-    let draggingItem = null;
-
-    // 綁定事件
-    container.addEventListener("dragstart", (e) => {
-      draggingItem = e.target;
-      e.target.style.border = "2px dashed #00e5ff";
-    });
-
-    container.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      const afterElement = [
-        ...container.querySelectorAll(".draggable:not(.dragging)"),
-      ].reduce(
-        (closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = e.clientY - box.top - box.height / 2;
-          return offset < 0 && offset > closest.offset
-            ? { offset: offset, element: child }
-            : closest;
-        },
-        { offset: Number.NEGATIVE_INFINITY },
-      ).element;
-
-      if (afterElement == null) container.appendChild(draggingItem);
-      else container.insertBefore(draggingItem, afterElement);
-    });
-
-    container.addEventListener("dragend", (e) => {
-      e.target.style.border = "2px solid #555";
-    });
-  },
-  on_finish: function (data) {
-    // 抓取當前畫面上 div 的排列順序
-    var items = document.querySelectorAll(".draggable");
-    data.final_order = Array.from(items).map((item) =>
-      item.getAttribute("data-img"),
-    );
-  },
+        <div>
+            <p>【安心信任排序】</p>
+            <p>請想像您目前在該系統遇到了「帳號儲值失敗」或「演唱會票務異常」的緊急問題需要協助。請將以下五個客服頭貼，依據「最能讓您感到安心、且最願意向其諮詢」的程度進行名次排序。（1為最安心；5為最不安心）</p>
+            ${final_5_avatars.map((img, i) => `<img src="${img}" width="50"><select name="rank2_${i}"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select><br>`).join("")}
+        </div>
+    </div>
+  `,
 };
+timeline.push(stage4_combined);
 timeline.push(stage4_rank);
 
 // ==========================================
