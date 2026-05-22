@@ -6,13 +6,16 @@ var jsPsych = initJsPsych({
     jsPsych.setProgressBar(1);
     console.log(jsPsych.data.get().json());
     showCompletionScreen();
-    setTimeout(showCompletionScreen, 100);
+    [100, 500, 1000, 2000].forEach(function (delay) {
+      setTimeout(showCompletionScreen, delay);
+    });
   },
 });
 
 function showCompletionScreen() {
   var content = document.querySelector("#jspsych-content");
   var display = document.querySelector(".jspsych-display-element");
+  var existingOverlay = document.querySelector("#completion-overlay");
   var html = `
     <section class="completion-screen">
       <h2>問卷填寫完畢</h2>
@@ -20,6 +23,13 @@ function showCompletionScreen() {
       <p>您現在可以安心關閉此頁面。</p>
     </section>
   `;
+
+  if (!existingOverlay) {
+    var overlay = document.createElement("div");
+    overlay.id = "completion-overlay";
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+  }
 
   if (content) {
     content.innerHTML = html;
