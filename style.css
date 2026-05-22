@@ -556,7 +556,7 @@ textarea {
 }
 
 /* ==========================================
-   問卷進度條置頂設定
+   1. 實驗進度條固定置頂 (全平台暴力覆蓋版)
 ========================================== */
 #jspsych-progressbar-container {
   position: fixed !important;
@@ -567,11 +567,73 @@ textarea {
   background-color: var(--page) !important;
   padding: 15px 0 !important;
   border-bottom: 1px solid var(--border) !important;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+  box-shadow: var(--shadow) !important;
   margin: 0 !important;
-  transform: none !important; /* 防止 jsPsych 父元素干擾 */
+  transform: none !important; /* 防止被 jsPsych 父元素位移干擾 */
 }
 
+/* 內容區塊自動下移，避免被置頂進度條遮擋 */
 .jspsych-content-wrapper {
   padding-top: 80px !important; 
+}
+
+/* ==========================================
+   2. 前導情境頁面專用排版
+========================================== */
+.experiment-copy {
+  max-width: 650px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.experiment-copy h2 {
+  text-align: center;
+}
+
+/* 情境頁面內的 Logo 圖，與公司名稱完美對齊 */
+.experiment-copy .inline-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+  vertical-align: middle;
+  margin-right: 6px;
+  display: inline-block;
+}
+
+/* ==========================================
+   3. 實驗結束自訂感謝畫面 (深色科幻質感)
+========================================== */
+.custom-thank-you-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  color: #888;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.custom-thank-you-container h1 {
+  color: #00e5ff;
+  margin-bottom: 10px;
+}
+
+.custom-thank-you-container p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.custom-thank-you-container .safe-close-box {
+  margin-top: 20px;
+  padding: 15px 30px;
+  background-color: #2b2b30;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.custom-thank-you-container .safe-close-box p {
+  color: #fff;
+  font-size: 16px;
+  margin: 0;
 }
