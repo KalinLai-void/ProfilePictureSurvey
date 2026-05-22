@@ -665,8 +665,8 @@ textarea {
 }
 
 .scenario-logo {
-  width: 10px;         /* 放大後的寬度，可依視覺效果自由調整數值 */
-  height: 10px;        /* 放大後的高度 */
+  width: 25px;         /* 放大後的寬度，可依視覺效果自由調整數值 */
+  height: 25px;        /* 放大後的高度 */
   object-fit: cover;
   border-radius: 12px; /* 隨著圖片變大，圓角也微調得更圓潤 */
   box-shadow: var(--shadow); /* 帶入你原有的陰影變數，增加立體感 */
