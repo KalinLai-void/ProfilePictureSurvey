@@ -53,7 +53,7 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>基本資料</h2><p>請先填寫以下資料。所有資料僅供課程研究分析使用。</p>",
+  preamble: "<h2>第一階段：人口統計與先備知識</h2>",
   html: `
     <div class="form-panel">
       <label>生理性別
@@ -65,48 +65,28 @@ timeline.push({
         </select>
       </label>
 
-      <label>年齡
+      <label>年齡層
         <select name="age" required>
           <option value="">請選擇</option>
-          <option value="under18">18 歲以下</option>
-          <option value="18-24">18-24 歲</option>
-          <option value="25-34">25-34 歲</option>
-          <option value="35up">35 歲以上</option>
+          <option value="under18">18歲以下</option>
+          <option value="18-24">18-24歲</option>
+          <option value="25-34">25-34歲</option>
+          <option value="35up">35歲以上</option>
         </select>
       </label>
 
-      <fieldset>
-        <legend>你平常接觸 ACG、動漫、遊戲、VTuber 或虛擬角色相關內容的頻率為何？</legend>
-        <label><input type="radio" name="acg_habit" value="1" required> 1 非常少</label>
+      <fieldset class="score-options">
+        <legend>您平時是否有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣？（1~5分）</legend>
+        <label><input type="radio" name="acg_habit" value="1" required> 1</label>
         <label><input type="radio" name="acg_habit" value="2"> 2</label>
         <label><input type="radio" name="acg_habit" value="3"> 3</label>
         <label><input type="radio" name="acg_habit" value="4"> 4</label>
-        <label><input type="radio" name="acg_habit" value="5"> 5 非常頻繁</label>
+        <label><input type="radio" name="acg_habit" value="5"> 5</label>
       </fieldset>
     </div>
   `,
   button_label: "下一步",
-  data: { stage: "demographics" },
-});
-
-timeline.push({
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `
-    <section class="experiment-copy">
-      <h2>情境說明</h2>
-      <p>
-        請想像你正在瀏覽一款名為 <strong>Aethoria Infinite</strong> 的線上遊戲。
-        這是一款結合奇幻世界、冒險任務與 AI 客服系統的 MMORPG。遊戲官方網站提供
-        聊天式客服介面，協助玩家處理帳號、任務、儲值與遊戲設定等問題。
-      </p>
-      <p>
-        接下來你會看到兩種客服聊天介面：一種沒有顯示客服頭像，另一種有顯示客服頭像。
-        請依照你看到的畫面，評估你對這個客服介面的感受。
-      </p>
-    </section>
-  `,
-  choices: ["開始實驗"],
-  data: { stage: "intro" },
+  data: { stage: "demographics_and_prior_knowledge" },
 });
 
 var likertScale = [
@@ -117,62 +97,68 @@ var likertScale = [
   "非常同意",
 ];
 
-var sharedQuestions = [
+var baseScaleQuestions = [
   {
-    prompt: "1. 我認為這個客服介面看起來是友善的。",
-    name: "friendly",
+    prompt: "1. 這個客服讓我覺得有親切感。",
+    name: "q1_closeness",
   },
   {
-    prompt: "2. 我認為這個客服介面能讓我感到安心。",
-    name: "comfort",
+    prompt: "2. 這個客服的整體視覺形象讓人感到友善且容易親近。",
+    name: "q2_friendly_visual",
   },
   {
-    prompt: "3. 我認為這個客服介面是值得信任的。",
-    name: "trust",
+    prompt: "3. 我覺得這個客服是可信任的。",
+    name: "q3_trustworthy",
   },
   {
-    prompt: "4. 我願意向這個客服介面詢問遊戲相關問題。",
-    name: "willing_to_ask",
+    prompt: "4. 我覺得這個客服看起來很專業。",
+    name: "q4_professional",
   },
   {
-    prompt: "5. 我認為這個客服介面符合 Aethoria Infinite 的遊戲形象。",
-    name: "brand_fit",
-  },
-];
-
-var avatarQuestions = [
-  {
-    prompt: "6. 我認為客服頭像讓這個介面更有親近感。",
-    name: "avatar_closeness",
+    prompt: "5. 我願意向此客服提供更多個人問題及資訊。",
+    name: "q5_disclose_information",
   },
   {
-    prompt: "7. 我認為客服頭像讓我更容易理解客服代表的存在。",
-    name: "avatar_presence",
+    prompt: "6. 這個客服讓我覺得不自然或怪異。",
+    name: "q6_unnatural",
   },
   {
-    prompt: "8. 我認為客服頭像能提升我對客服介面的信任感。",
-    name: "avatar_trust",
-  },
-  {
-    prompt: "9. 我認為這個客服頭像適合用於遊戲官方客服。",
-    name: "avatar_official_fit",
-  },
-  {
-    prompt: "10. 我認為這個客服頭像會影響我對遊戲品牌的印象。",
-    name: "avatar_brand_effect",
+    prompt: "7. 面對這個客服的呈現方式，會讓我感到有些不自在。",
+    name: "q7_uncomfortable",
   },
 ];
 
-var overallQuestions = [
+var avatarOnlyScaleQuestions = [
   {
-    prompt: "11. 整體而言，我喜歡這個客服介面的視覺呈現。",
-    name: "overall_like",
+    prompt: "8. 這個客服的頭貼會讓我分心，影響我閱讀對話框中的文字。",
+    name: "q8_avatar_distraction",
   },
   {
-    prompt: "12. 整體而言，我認為這個客服介面能提升遊戲官方的專業感。",
-    name: "overall_professional",
+    prompt: "9. 我認為這個頭貼符合我對該品牌的期待。",
+    name: "q9_avatar_brand_expectation",
+  },
+  {
+    prompt: "10. 我認為這個頭貼的視覺設計，能準確傳達出該品牌的特色與定位。",
+    name: "q10_avatar_brand_positioning",
   },
 ];
+
+var outcomeScaleQuestions = [
+  {
+    prompt: "11. 我認為這個客服提升了我對此品牌的好感度。",
+    name: "q11_brand_preference",
+  },
+  {
+    prompt: "12. 這個客服的呈現方式，讓我對該品牌產生了正面的印象。",
+    name: "q12_positive_brand_impression",
+  },
+];
+
+var noAvatarScaleQuestions = baseScaleQuestions.concat(outcomeScaleQuestions);
+var avatarScaleQuestions = baseScaleQuestions.concat(
+  avatarOnlyScaleQuestions,
+  outcomeScaleQuestions,
+);
 
 function withScale(questions) {
   return questions.map(function (question) {
@@ -186,13 +172,13 @@ function withScale(questions) {
 timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
-    <h2>客服介面評估：無頭像版本</h2>
-    <p>請觀察下方沒有客服頭像的聊天介面，並回答後續題目。</p>
+    <h2>第二階段：無頭貼對話內容</h2>
+    <p>先讓受試者觀看一次沒頭貼的對話內容，並讓受試者填寫實驗設計的量表</p>
     <div class="stimulus-frame">
-      <img src="${chatNoAvatar}" alt="無頭像聊天介面">
+      <img src="${chatNoAvatar}" alt="沒頭貼的對話內容">
     </div>
   `,
-  questions: withScale(sharedQuestions.concat(overallQuestions)),
+  questions: withScale(noAvatarScaleQuestions),
   button_label: "下一步",
   data: { stage: "no_avatar_rating", avatar_condition: "none" },
 });
@@ -209,14 +195,14 @@ var selectedAvatar = jsPsych.randomization.sampleWithoutReplacement(
 timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
-    <h2>客服介面評估：有頭像版本</h2>
-    <p>請觀察下方含有客服頭像的聊天介面，並回答後續題目。</p>
+    <h2>第三階段：有頭貼對話內容</h2>
+    <p>從非品牌LOGO的有頭貼組，抽出一張照片做為頭貼，並讓受試者觀看這個頭貼的對話內容，再讓受試者填寫實驗設計的量表</p>
     <div class="chat-composite">
-      <img class="chat-layout" src="${chatWithAvatar}" alt="有頭像聊天介面">
-      <img class="chat-avatar" src="${selectedAvatar}" alt="客服頭像">
+      <img class="chat-layout" src="${chatWithAvatar}" alt="有頭貼的對話內容">
+      <img class="chat-avatar" src="${selectedAvatar}" alt="客服頭貼">
     </div>
   `,
-  questions: withScale(sharedQuestions.concat(avatarQuestions, overallQuestions)),
+  questions: withScale(avatarScaleQuestions),
   button_label: "下一步",
   data: {
     stage: "avatar_rating",
@@ -228,18 +214,17 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>頭像必要性評估</h2>",
+  preamble: "<h2>第四階段：頭貼必要性</h2>",
   html: `
     <div class="form-panel">
       <fieldset>
-        <legend>你認為遊戲官方客服介面需要放置客服頭像嗎？</legend>
-        <label><input type="radio" name="avatar_necessity" value="yes" required> 需要</label>
-        <label><input type="radio" name="avatar_necessity" value="no"> 不需要</label>
-        <label><input type="radio" name="avatar_necessity" value="unsure"> 不確定</label>
+        <legend>我認為客服系統的頭貼有存在的必要（是/否）</legend>
+        <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
+        <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
       </fieldset>
 
-      <label>請簡短說明原因
-        <textarea name="avatar_necessity_reason" rows="4" placeholder="請輸入你的想法"></textarea>
+      <label>原因（非必填）
+        <textarea name="avatar_necessity_reason" rows="4"></textarea>
       </label>
     </div>
   `,
@@ -264,7 +249,7 @@ function pickRankingImages() {
   }
 
   return jsPsych.randomization.shuffle(
-    [{ path: imgLogo, group: "official_logo", label: "官方 Logo" }].concat(
+    [{ path: imgLogo, group: "brand_logo", label: "品牌LOGO" }].concat(
       validSample,
     ),
   );
@@ -272,54 +257,115 @@ function pickRankingImages() {
 
 var rankingImages = pickRankingImages();
 
-function rankingSelect(name) {
+function rankingSelect(name, rankSet) {
   return `
-    <select name="${name}" required>
+    <select name="${name}" data-rank-set="${rankSet}" required>
       <option value="">請選擇</option>
-      <option value="1">1 最適合</option>
+      <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
       <option value="4">4</option>
-      <option value="5">5 最不適合</option>
+      <option value="5">5</option>
     </select>
   `;
 }
 
-function rankingRows(prefix) {
+function rankingRows(prefix, rankSet) {
   return rankingImages
     .map(function (item, index) {
       return `
         <div class="ranking-row">
           <img src="${item.path}" alt="${item.label}">
           <span>${item.label}</span>
-          ${rankingSelect(prefix + "_" + index)}
+          ${rankingSelect(prefix + "_" + index, rankSet)}
         </div>
       `;
     })
     .join("");
 }
 
+function enableRankingValidation() {
+  var form = document.querySelector("#jspsych-survey-html-form");
+  var button = document.querySelector(
+    "#jspsych-survey-html-form-next, #jspsych-survey-html-form input[type='submit'], #jspsych-survey-html-form button[type='submit']",
+  );
+  var warning = document.querySelector("#ranking-warning");
+  var rankSets = ["brand_fit", "trust"];
+
+  function validateSet(rankSet) {
+    var selects = Array.from(
+      document.querySelectorAll('select[data-rank-set="' + rankSet + '"]'),
+    );
+    var values = selects.map(function (select) {
+      return select.value;
+    });
+    var complete = values.every(Boolean);
+    var unique = new Set(values).size === values.length;
+    return complete && unique;
+  }
+
+  function validateAllRankSets() {
+    return rankSets.every(validateSet);
+  }
+
+  function updateButtonState() {
+    var valid = validateAllRankSets();
+    if (button) {
+      button.disabled = !valid;
+    }
+    if (warning) {
+      warning.textContent = valid
+        ? ""
+        : "請確認兩個排序指標都已選完 1 到 5，且同一個排序指標內不要重複名次。";
+    }
+    return valid;
+  }
+
+  document.querySelectorAll("select[data-rank-set]").forEach(function (select) {
+    select.addEventListener("change", updateButtonState);
+  });
+
+  if (form) {
+    form.addEventListener(
+      "submit",
+      function (event) {
+        if (!validateAllRankSets()) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          updateButtonState();
+        }
+      },
+      true,
+    );
+  }
+
+  updateButtonState();
+}
+
 timeline.push({
   type: jsPsychSurveyHtmlForm,
   preamble: `
-    <h2>頭像排序任務</h2>
-    <p>
-      下方包含 Aethoria Infinite 官方 Logo 與四個候選客服頭像。
-      請依照兩個標準分別排序，1 代表最適合，5 代表最不適合。
-    </p>
+    <h2>第四階段：偏好排序</h2>
+    <p>無論您前一題的答案為何，若未來系統全面導入頭貼，請對以下選項進行偏好排序...</p>
   `,
   html: `
+    <p class="ranking-note">
+      五個頭貼包括品牌LOGO一張，以及剩下四張從非品牌LOGO的有頭貼組抽選；同一組別的頭貼不抽超過2張。
+    </p>
     <div class="ranking-grid">
       <section>
-        <h3>標準一：最適合代表遊戲官方客服</h3>
-        ${rankingRows("official_fit_rank")}
+        <h3>排序指標</h3>
+        <p>請根據 Aethoria Infinite 作為一家「娛樂科技大廠」的品牌背景，將以下五個客服頭貼，依據「最符合該品牌形象」到「最不符合」進行名次排序。（1為最符合；5為最不符合）</p>
+        ${rankingRows("brand_fit_rank", "brand_fit")}
       </section>
 
       <section>
-        <h3>標準二：最能讓你感到信任與安心</h3>
-        ${rankingRows("trust_rank")}
+        <h3>排序指標</h3>
+        <p>請想像您目前在該系統遇到了「帳號儲值失敗」或「演唱會票務異常」的緊急問題需要協助。請將以下五個客服頭貼，依據「最能讓您感到安心、且最願意向其諮詢」的程度進行名次排序。（1為最安心；5為最不安心）</p>
+        ${rankingRows("trust_rank", "trust")}
       </section>
     </div>
+    <p id="ranking-warning" class="ranking-warning"></p>
   `,
   button_label: "送出",
   data: {
@@ -331,14 +377,15 @@ timeline.push({
       return item.group;
     }),
   },
+  on_load: enableRankingValidation,
 });
 
 timeline.push({
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `
     <section class="experiment-copy">
-      <h2>實驗結束</h2>
-      <p>感謝你的填答。你的回覆已完成記錄，請依照研究者或課程平台的指示關閉此頁面。</p>
+      <h2>問卷結束</h2>
+      <p>感謝您的填答。</p>
     </section>
   `,
   choices: "NO_KEYS",

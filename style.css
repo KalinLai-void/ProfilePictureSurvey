@@ -68,11 +68,9 @@ strong {
 }
 
 .jspsych-display-element {
-  align-items: center;
   background: transparent;
-  display: flex;
-  justify-content: center;
   min-height: 100vh;
+  overflow-x: hidden;
   padding: 32px 18px;
 }
 
@@ -81,7 +79,7 @@ strong {
   border: 1px solid rgba(89, 101, 122, 0.8);
   border-radius: 10px;
   box-shadow: var(--shadow);
-  margin: 0 auto;
+  margin: 0 auto 32px;
   max-width: min(980px, 100%);
   padding: 34px;
   text-align: center;
@@ -133,6 +131,14 @@ strong {
   transform: translateY(-1px);
 }
 
+.jspsych-btn:disabled {
+  background: #596171;
+  box-shadow: none;
+  color: #c9cfda;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .jspsych-btn:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
@@ -178,9 +184,9 @@ label {
 
 input[type="radio"] {
   accent-color: var(--accent);
-  height: 18px;
+  height: 22px;
   margin-right: 8px;
-  width: 18px;
+  width: 22px;
 }
 
 select,
@@ -279,14 +285,38 @@ textarea {
 }
 
 .jspsych-survey-likert-opts input {
-  margin: 0 0 8px;
+  height: 24px;
+  margin: 0 0 10px;
+  width: 24px;
 }
 
 .jspsych-survey-likert-opt-label {
-  color: var(--muted);
-  font-size: 15px;
+  color: #f4f6fb;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 1.35;
   text-align: center;
+}
+
+.score-options {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.score-options legend {
+  grid-column: 1 / -1;
+}
+
+.score-options label {
+  align-items: center;
+  background: rgba(21, 25, 34, 0.74);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  display: flex;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 52px;
+  padding: 8px;
 }
 
 .ranking-grid {
@@ -301,6 +331,26 @@ textarea {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 18px;
+}
+
+.ranking-note {
+  background: rgba(245, 199, 107, 0.12);
+  border: 1px solid rgba(245, 199, 107, 0.35);
+  border-radius: 8px;
+  color: #ffe6a3;
+  font-size: 16px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.ranking-warning {
+  color: #ffb9b9;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 18px 0 0;
+  min-height: 28px;
+  text-align: center;
 }
 
 .ranking-row {
@@ -341,7 +391,6 @@ textarea {
   }
 
   .jspsych-display-element {
-    align-items: flex-start;
     padding: 16px 10px;
   }
 
@@ -367,12 +416,25 @@ textarea {
   }
 
   .jspsych-survey-likert-opts input {
+    height: 24px;
     margin: 0;
+    width: 24px;
   }
 
   .jspsych-survey-likert-opt-label {
     font-size: 16px;
+    font-weight: 700;
     text-align: left;
+  }
+
+  .score-options {
+    grid-template-columns: repeat(5, minmax(44px, 1fr));
+  }
+
+  .score-options label {
+    font-size: 15px;
+    min-height: 58px;
+    padding: 6px;
   }
 
   .ranking-grid {
