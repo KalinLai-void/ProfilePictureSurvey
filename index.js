@@ -626,6 +626,7 @@ timeline.push({
   type: jsPsychSurveyHtmlForm,
   preamble: `
     <h2>指標偏好排序</h2>
+    <p class="section-intro">若未來系統全面導入頭貼，請對以下選項進行偏好排序...</p>
   `,
   html: `
     <div class="ranking-grid">
@@ -655,15 +656,15 @@ timeline.push({
   html: `
     <div class="form-panel">
       <fieldset class="binary-options">
-        <legend>你認為客服系統/聊天機器人的頭貼是否有存在的必要？</legend>
+        <legend>我認為客服系統的頭貼有存在的必要</legend>
         <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
         <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
       </fieldset>
 
-      <label>（非必填）請說明客服/聊天機器人的頭貼是否影響你對品牌的印象或互動意願？
+      <label>客服/聊天機器人的頭貼是否影響你對品牌的印象或互動意願？（非必填）
         <textarea name="avatar_interaction_reason" rows="4"></textarea>
       </label>
-      <label>（非必填）請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。
+      <label>請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。（非必填）
         <textarea name="avatar_ranking_reason" rows="4"></textarea>
       </label>
     </div>
