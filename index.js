@@ -3,8 +3,8 @@ var jsPsych = initJsPsych({
   auto_update_progress_bar: true,
   message_progress_bar: "問卷進度",
   on_finish: function () {
-    jsPsych.setProgressBar(1);
-    console.log(jsPsych.data.get().json());
+    // 移除 jsPsych.setProgressBar(1); 避免 DOM 已經被清除時報錯中斷存檔
+    console.log("Experiment completed.", jsPsych.data.get().json());
   },
 });
 
@@ -547,30 +547,6 @@ function enableRankingValidation() {
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>頭貼必要性</h2>",
-  html: `
-    <div class="form-panel">
-      <fieldset class="binary-options">
-        <legend>你認為客服系統/聊天機器人的頭貼是否有存在的必要？</legend>
-        <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
-        <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
-      </fieldset>
-
-      <label>（非必填）請說明客服/聊天機器人的頭貼是否影響你對品牌的印象或互動意願？
-        <textarea name="avatar_interaction_reason" rows="4"></textarea>
-      </label>
-      <label>（非必填）請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。
-        <textarea name="avatar_ranking_reason" rows="4"></textarea>
-      </label>
-    </div>
-  `,
-  button_label: "下一步",
-  data: { stage: "avatar_necessity" },
-  on_finish: flattenResponseData,
-});
-
-timeline.push({
-  type: jsPsychSurveyHtmlForm,
   preamble: `
     <h2>指標偏好排序</h2>
   `,
@@ -598,20 +574,49 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "",
+  preamble: "<h2>頭貼必要性</h2>",
   html: `
-    <section class="completion-screen">
-      <h2>??????</h2>
-      <p>??????????????????</p>
-      <p>????????????????</p>
-      <p>???????????????????????????????</p>
+    <div class="form-panel">
+      <fieldset class="binary-options">
+        <legend>你認為客服系統/聊天機器人的頭貼是否有存在的必要？</legend>
+        <label><input type="radio" name="avatar_necessity" value="yes" required> 是</label>
+        <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
+      </fieldset>
+
+      <label>（非必填）請說明客服/聊天機器人的頭貼是否影響你對品牌的印象或互動意願？
+        <textarea name="avatar_interaction_reason" rows="4"></textarea>
+      </label>
+      <label>（非必填）請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。
+        <textarea name="avatar_ranking_reason" rows="4"></textarea>
+      </label>
+    </div>
+  `,
+  button_label: "下一步",
+  data: { stage: "avatar_necessity" },
+  on_finish: flattenResponseData,
+});
+
+timeline.push({
+  type: jsPsychHtmlButtonResponse, // 改用 ButtonResponse，避開表單提交的雷區
+  stimulus: `
+    <section class="completion-screen" style="text-align: center; margin-bottom: 20px;">
+      <h2 style="color: #2563eb; font-size: 24px; margin-bottom: 16px;">問卷填寫完畢</h2>
+      <p style="margin-bottom: 8px;">感謝您的填答，您已完成所有問卷內容。</p>
+      <p style="margin-bottom: 8px;">請按下下方按鈕送出資料並結束問卷。</p>
+      <p style="color: #6b7280; font-size: 14px; margin-top: 16px;">送出後若畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
     </section>
   `,
-  button_label: "???????",
+  choices: ["送出並結束問卷"],
+  data: { stage: "completion_confirmation" },
   on_load: function () {
+    // 這裡設定進度條是安全的，因為此時畫面還沒被清空
     jsPsych.setProgressBar(1);
+
+    // 保留你的 10 秒自動結束功能，但更新成對應的 Button 選擇器
     window.completionAutoFinishTimer = setTimeout(function () {
-      var button = document.querySelector("#jspsych-survey-html-form-next");
+      var button = document.querySelector(
+        "#jspsych-html-button-response-button-0",
+      );
       if (button) {
         button.click();
       }
@@ -624,7 +629,6 @@ timeline.push({
       window.completionAutoFinishTimer = null;
     }
   },
-  data: { stage: "completion_confirmation" },
 });
 
 jsPsych.run(timeline);
