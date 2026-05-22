@@ -248,41 +248,62 @@ var rank_options = final_5_avatars.map(
     `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
 );
 
-// 排序 1：品牌契合度
-var stage4_rank1 = {
-  type: jsPsychHtmlRankOrder,
-  stimulus: `
-        <p style="color:#A020F0; font-weight:bold;">【排序一：品牌契合度】</p>
-        <p>請將圖片拖曳至您認為「最符合該品牌形象」的順序（由上至下）：</p>
-    `,
-  choices: rank_options,
-  labels: [
-    "第 1 名 (最符合)",
-    "第 2 名",
-    "第 3 名",
-    "第 4 名",
-    "第 5 名 (最不符合)",
-  ],
-};
-timeline.push(stage4_rank1);
+// 拖曳排序核心)
+var stage4_rank = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: function () {
+    var html = `
+    <style>
+        .rank-section { margin-bottom: 40px; }
+        .drag-container { display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 20px; background: #333; border-radius: 10px; }
+        .draggable { padding: 10px; background: #444; border: 1px solid #555; color: white; display: flex; align-items: center; cursor: grab; width: 300px; border-radius: 5px; }
+    </style>
+    <h3>第四階段：綜合評比</h3>
+    
+    <div class="rank-section">
+        <p style="color:#00e5ff;">【排序一：品牌契合度】(由上至下：最符合 → 最不符合)</p>
+        <div id="sort1" class="drag-container">
+            ${final_5_avatars.map((img, i) => `<div class="draggable" draggable="true" data-img="${img}"> <img src="${img}" width="40" style="margin-right:10px;"> 選項 ${i + 1}</div>`).join("")}
+        </div>
+    </div>
 
-// 排序 2：安心與信任感
-var stage4_rank2 = {
-  type: jsPsychHtmlRankOrder,
-  stimulus: `
-        <p style="color:#00FFFF; font-weight:bold;">【排序二：安心與信任感】</p>
-        <p>請將圖片拖曳至您認為「最能讓您感到安心」的順序（由上至下）：</p>
-    `,
-  choices: rank_options,
-  labels: [
-    "第 1 名 (最安心)",
-    "第 2 名",
-    "第 3 名",
-    "第 4 名",
-    "第 5 名 (最不安心)",
-  ],
+    <div class="rank-section">
+        <p style="color:#ff00ff;">【排序二：安心與信任感】(由上至下：最安心 → 最不安心)</p>
+        <div id="sort2" class="drag-container">
+            ${final_5_avatars.map((img, i) => `<div class="draggable" draggable="true" data-img="${img}"> <img src="${img}" width="40" style="margin-right:10px;"> 選項 ${i + 1}</div>`).join("")}
+        </div>
+    </div>
+    <p>拖曳完成後，按「空白鍵」進入結束畫面。</p>
+    `;
+    return html;
+  },
+  on_load: function () {
+    // 綁定兩組容器的拖曳邏輯
+    ["sort1", "sort2"].forEach((id) => {
+      const container = document.getElementById(id);
+      let draggingItem = null;
+      container.addEventListener("dragstart", (e) => {
+        draggingItem = e.target;
+      });
+      container.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const after = getDragAfterElement(container, e.clientY);
+        if (after == null) container.appendChild(draggingItem);
+        else container.insertBefore(draggingItem, after);
+      });
+    });
+  },
+  on_finish: function (data) {
+    // 紀錄兩組最終順序
+    data.brand_fit_order = Array.from(
+      document.getElementById("sort1").children,
+    ).map((c) => c.getAttribute("data-img"));
+    data.trust_order = Array.from(
+      document.getElementById("sort2").children,
+    ).map((c) => c.getAttribute("data-img"));
+  },
 };
-timeline.push(stage4_rank2);
+timeline.push(stage4_rank);
 
 // ==========================================
 // 5. 結束畫面
