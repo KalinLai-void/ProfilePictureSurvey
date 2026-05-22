@@ -211,6 +211,13 @@ input[type="radio"] {
   width: 22px;
 }
 
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  height: 22px;
+  margin-right: 8px;
+  width: 22px;
+}
+
 select,
 textarea {
   background: var(--input);
@@ -277,8 +284,8 @@ textarea {
   color: var(--text);
   font-size: 18px;
   font-weight: 700;
-  margin: 18px 0 0;
-  padding: 16px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
 }
 
 .jspsych-survey-likert-opts {
@@ -312,8 +319,8 @@ textarea {
   border-right: 1px solid var(--border);
   display: grid;
   justify-items: center;
-  min-height: 86px;
-  padding: 12px 8px 14px;
+  min-height: 74px;
+  padding: 10px 8px 10px;
 }
 
 .jspsych-survey-likert-opts li:last-child {
@@ -343,11 +350,16 @@ textarea {
   grid-template-columns: 1fr;
 }
 
+.checkbox-options {
+  grid-template-columns: 1fr;
+}
+
 .score-options legend {
   grid-column: 1 / -1;
 }
 
 .score-options label,
+.checkbox-options label,
 .binary-options label {
   align-items: center;
   background: var(--panel-soft);
@@ -362,6 +374,16 @@ textarea {
 
 .score-options label {
   justify-content: flex-start;
+}
+
+.checkbox-options label {
+  justify-content: flex-start;
+}
+
+.form-warning {
+  color: var(--danger);
+  font-weight: 700;
+  margin: 0;
 }
 
 .binary-options {
@@ -463,8 +485,8 @@ textarea {
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
-    min-height: 74px;
-    padding: 10px 4px 12px;
+    min-height: 64px;
+    padding: 8px 4px 10px;
   }
 
   .jspsych-survey-likert-opts li:last-child {

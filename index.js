@@ -36,6 +36,59 @@ var allAvatars = Object.keys(avatarPools).flatMap(function (group) {
 
 var timeline = [];
 
+function enableBackgroundValidation() {
+  var form = document.querySelector("#jspsych-survey-html-form");
+  var warning = document.createElement("p");
+  var noneBox = document.querySelector(
+    'input[name="related_background"][value="none"]',
+  );
+  var boxes = Array.from(
+    document.querySelectorAll('input[name="related_background"]'),
+  );
+
+  warning.className = "form-warning";
+  warning.textContent = "請至少勾選一項相關背景。";
+  warning.hidden = true;
+  if (form) {
+    form.appendChild(warning);
+  }
+
+  boxes.forEach(function (box) {
+    box.addEventListener("change", function () {
+      if (box === noneBox && box.checked) {
+        boxes.forEach(function (otherBox) {
+          if (otherBox !== noneBox) {
+            otherBox.checked = false;
+          }
+        });
+      } else if (box.checked && noneBox) {
+        noneBox.checked = false;
+      }
+
+      warning.hidden = boxes.some(function (item) {
+        return item.checked;
+      });
+    });
+  });
+
+  if (form) {
+    form.addEventListener(
+      "submit",
+      function (event) {
+        var hasBackground = boxes.some(function (item) {
+          return item.checked;
+        });
+        if (!hasBackground) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          warning.hidden = false;
+        }
+      },
+      true,
+    );
+  }
+}
+
 timeline.push({
   type: jsPsychPreload,
   images: [
@@ -50,42 +103,68 @@ timeline.push({
 
 timeline.push({
   type: jsPsychSurveyHtmlForm,
-  preamble: "<h2>基本資料調查</h2>",
+  preamble: "<h2>??????</h2>",
   html: `
     <div class="form-panel">
       <label>生理性別
         <select name="gender" required>
           <option value="">請選擇</option>
-          <option value="male">男</option>
-          <option value="female">女</option>
+          <option value="male">男性</option>
+          <option value="female">女性</option>
+          <option value="other">其他 / 不想透露</option>
         </select>
       </label>
 
-      <label>年齡層
-        <select name="age" required>
-        <option value="">請選擇年齡</option>  
-        <option value="under18">18歲以下</option>
-          <option value="18-24">18-24歲</option>
-          <option value="25-29">25-29歲</option>
-          <option value="30-34">30-34歲</option>
-          <option value="35-39">35-39歲</option>
-          <option value="40-44">40-44歲</option>
-          <option value="45up">45歲以上</option>
+      <label>年齡
+        <input type="number" name="age" min="1" max="120" required>
+      </label>
+
+      <label>職業 / 身份
+        <select name="occupation" required>
+          <option value="">請選擇</option>
+          <option value="student">學生</option>
+          <option value="employee">上班族</option>
+          <option value="freelancer">自由職業者</option>
+          <option value="unemployed">未就業 / 待業</option>
+          <option value="other">其他</option>
         </select>
+      </label>
+
+      <fieldset class="checkbox-options">
+        <legend>相關背景</legend>
+        <label><input type="checkbox" name="related_background" value="design_visual_ux"> 設計 / 視覺 / UX 相關</label>
+        <label><input type="checkbox" name="related_background" value="tech_it_ai"> 資訊 / 科技 / AI 相關</label>
+        <label><input type="checkbox" name="related_background" value="game_anime_content"> 遊戲 / 動漫 / 內容創作相關</label>
+        <label><input type="checkbox" name="related_background" value="none"> 無相關</label>
+        <label><input type="checkbox" name="related_background" value="other"> 其他</label>
+      </fieldset>
+
+      <label>其他相關背景
+        <input type="text" name="related_background_other">
       </label>
 
       <fieldset class="score-options">
-        <legend>我平時是否有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣？</legend>
-        <label><input type="radio" name="acg_habit" value="1" required> 非常不符合我</label>
-        <label><input type="radio" name="acg_habit" value="2"> 不符合我</label>
-        <label><input type="radio" name="acg_habit" value="3"> 普通</label>
-        <label><input type="radio" name="acg_habit" value="4"> 符合我</label>
-        <label><input type="radio" name="acg_habit" value="5"> 非常符合我</label>
+        <legend>我平時有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣</legend>
+        <label><input type="radio" name="game_acg_frequency" value="1" required> 非常不符合我</label>
+        <label><input type="radio" name="game_acg_frequency" value="2"> 不符合我</label>
+        <label><input type="radio" name="game_acg_frequency" value="3"> 一般</label>
+        <label><input type="radio" name="game_acg_frequency" value="4"> 符合我</label>
+        <label><input type="radio" name="game_acg_frequency" value="5"> 非常符合我</label>
+      </fieldset>
+
+      <fieldset class="score-options">
+        <legend>您平時使用聊天機器人的頻率如何？</legend>
+        <label><input type="radio" name="chatbot_frequency" value="1" required> 非常不頻繁</label>
+        <label><input type="radio" name="chatbot_frequency" value="2"> 不頻繁</label>
+        <label><input type="radio" name="chatbot_frequency" value="3"> 一般</label>
+        <label><input type="radio" name="chatbot_frequency" value="4"> 頻繁</label>
+        <label><input type="radio" name="chatbot_frequency" value="5"> 非常頻繁</label>
       </fieldset>
     </div>
   `,
-  button_label: "下一步",
+  button_label: "???",
   data: { stage: "demographics_and_prior_knowledge" },
+  on_load: enableBackgroundValidation,
 });
 
 timeline.push({
@@ -415,16 +494,17 @@ timeline.push({
 });
 
 timeline.push({
-  type: jsPsychHtmlButtonResponse,
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: `
     <section class="completion-screen">
       <h2>問卷填寫完畢</h2>
       <p>感謝您的填答，您已完成所有問卷內容。</p>
-      <p>請按下方按鈕送出資料並結束問卷。</p>
-      <p>按下後若畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
+      <p>系統正在送出資料並結束問卷，請稍候。</p>
+      <p>若稍後畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
     </section>
   `,
-  choices: ["完成並送出"],
+  choices: "NO_KEYS",
+  trial_duration: 2500,
   on_load: function () {
     jsPsych.setProgressBar(1);
   },
