@@ -1,3 +1,25 @@
+// ==========================================
+// 全域防護：封鎖右鍵與開發者工具快捷鍵
+// ==========================================
+document.addEventListener("contextmenu", function (e) {
+  e.preventDefault(); // 阻擋按右鍵跳出選單
+});
+
+document.addEventListener("keydown", function (e) {
+  // 阻擋 F12 (開啟開發者工具)
+  if (e.key === "F12") {
+    e.preventDefault();
+  }
+  // 阻擋 Ctrl+Shift+I (Windows 開發者工具) / Cmd+Option+I (Mac)
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "i") {
+    e.preventDefault();
+  }
+  // 阻擋 Ctrl+S / Cmd+S (另存網頁)
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+    e.preventDefault();
+  }
+});
+
 var jsPsych = initJsPsych({
   show_progress_bar: true,
   auto_update_progress_bar: true,
@@ -250,18 +272,7 @@ timeline.push({
       <label>職業 / 身份
         <select name="occupation" required>
           <option value="">請選擇</option>
-          <option value="student">學生</option>
-          <option value="employee">上班族</option>
-          <option value="freelancer">自由職業者</option>
-          <option value="unemployed">未就業 / 待業</option>
-          <option value="other">其他</option>
-        </select>
-      </label>
-
-      <label>職業 / 身份
-        <select name="occupation" required>
-          <option value="">請選擇</option>
-          <option value="student">學生</option>
+          <option value="student">學生（在學中）</option>
           <option value="employee">上班族</option>
           <option value="freelancer">自由職業者</option>
           <option value="unemployed">未就業 / 待業</option>
