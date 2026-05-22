@@ -3,8 +3,7 @@ var jsPsych = initJsPsych({
   auto_update_progress_bar: true,
   message_progress_bar: "問卷進度",
   on_finish: function () {
-    // 移除 jsPsych.setProgressBar(1); 避免 DOM 已經被清除時報錯中斷存檔
-    console.log("Experiment completed.", jsPsych.data.get().json());
+    console.log(jsPsych.data.get().json());
   },
 });
 
@@ -597,7 +596,7 @@ timeline.push({
 });
 
 timeline.push({
-  type: jsPsychHtmlButtonResponse, // 改用 ButtonResponse，避開表單提交的雷區
+  type: jsPsychHtmlButtonResponse, // 改用這個，避免 form 攔截 submit 事件導致卡死
   stimulus: `
     <section class="completion-screen" style="text-align: center; margin-bottom: 20px;">
       <h2 style="color: #2563eb; font-size: 24px; margin-bottom: 16px;">問卷填寫完畢</h2>
@@ -609,14 +608,9 @@ timeline.push({
   choices: ["送出並結束問卷"],
   data: { stage: "completion_confirmation" },
   on_load: function () {
-    // 這裡設定進度條是安全的，因為此時畫面還沒被清空
-    jsPsych.setProgressBar(1);
-
-    // 保留你的 10 秒自動結束功能，但更新成對應的 Button 選擇器
+    // 保留你的 10 秒自動結束功能，但目標改為抓取 jsPsych 的預設按鈕 class
     window.completionAutoFinishTimer = setTimeout(function () {
-      var button = document.querySelector(
-        "#jspsych-html-button-response-button-0",
-      );
+      var button = document.querySelector(".jspsych-btn");
       if (button) {
         button.click();
       }
