@@ -310,6 +310,40 @@ function rankingRows(prefix, rankSet) {
     .join("");
 }
 
+function buildRankingTrialData() {
+  var data = {};
+
+  rankingImages.forEach(function (item, index) {
+    data["ranking_item_" + index + "_path"] = item.path;
+    data["ranking_item_" + index + "_group"] = item.group;
+    data["ranking_item_" + index + "_label"] = item.label;
+  });
+
+  return data;
+}
+
+function addRankingResponseMetadata(data) {
+  var response = data.response || {};
+  var rankSets = [
+    { key: "brand_fit", prefix: "brand_fit_rank" },
+    { key: "trust", prefix: "trust_rank" },
+  ];
+
+  rankSets.forEach(function (rankSet) {
+    rankingImages.forEach(function (item, index) {
+      var rank = response[rankSet.prefix + "_" + index];
+
+      data[rankSet.key + "_item_" + index + "_rank"] = rank;
+
+      if (rank) {
+        data[rankSet.key + "_rank_" + rank + "_path"] = item.path;
+        data[rankSet.key + "_rank_" + rank + "_group"] = item.group;
+        data[rankSet.key + "_rank_" + rank + "_label"] = item.label;
+      }
+    });
+  });
+}
+
 function enableRankingValidation() {
   var form = document.querySelector("#jspsych-survey-html-form");
   var button = document.querySelector(
@@ -394,16 +428,9 @@ timeline.push({
     <p id="ranking-warning" class="ranking-warning"></p>
   `,
   button_label: "送出",
-  data: {
-    stage: "avatar_ranking",
-    ranking_images: rankingImages.map(function (item) {
-      return item.path;
-    }),
-    ranking_groups: rankingImages.map(function (item) {
-      return item.group;
-    }),
-  },
+  data: Object.assign({ stage: "avatar_ranking" }, buildRankingTrialData()),
   on_load: enableRankingValidation,
+  on_finish: addRankingResponseMetadata,
 });
 
 jsPsych.run(timeline);
