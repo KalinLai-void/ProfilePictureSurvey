@@ -185,6 +185,12 @@ input:focus-visible {
   display: none;
 }
 
+.conditional-field {
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 700;
+}
+
 .form-panel label,
 .form-panel fieldset {
   display: grid;
@@ -223,7 +229,9 @@ input[type="checkbox"] {
 }
 
 select,
-textarea {
+textarea,
+input[type="number"],
+input[type="text"] {
   background: var(--input);
   border: 1px solid var(--border-strong);
   border-radius: 7px;

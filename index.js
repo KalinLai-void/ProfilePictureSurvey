@@ -44,6 +44,15 @@ function enableBackgroundValidation() {
   var occupationOtherInput = document.querySelector(
     'input[name="occupation_other"]',
   );
+  var backgroundOtherBox = document.querySelector(
+    'input[name="related_background"][value="other"]',
+  );
+  var backgroundOtherField = document.querySelector(
+    "#related-background-other-field",
+  );
+  var backgroundOtherInput = document.querySelector(
+    'input[name="related_background_other"]',
+  );
   var noneBox = document.querySelector(
     'input[name="related_background"][value="none"]',
   );
@@ -78,6 +87,21 @@ function enableBackgroundValidation() {
     updateOccupationOtherField();
   }
 
+  function updateBackgroundOtherField() {
+    var shouldShow = backgroundOtherBox && backgroundOtherBox.checked;
+
+    if (backgroundOtherField) {
+      backgroundOtherField.hidden = !shouldShow;
+    }
+
+    if (backgroundOtherInput) {
+      backgroundOtherInput.required = shouldShow;
+      if (!shouldShow) {
+        backgroundOtherInput.value = "";
+      }
+    }
+  }
+
   boxes.forEach(function (box) {
     box.addEventListener("change", function () {
       if (box === noneBox && box.checked) {
@@ -93,8 +117,11 @@ function enableBackgroundValidation() {
       warning.hidden = boxes.some(function (item) {
         return item.checked;
       });
+      updateBackgroundOtherField();
     });
   });
+
+  updateBackgroundOtherField();
 
   if (form) {
     form.addEventListener(
@@ -164,7 +191,7 @@ timeline.push({
         </select>
       </label>
 
-      <label id="occupation-other-field" class="conditional-field" hidden>其他 / 不想透露
+      <label id="occupation-other-field" class="conditional-field" hidden>請填寫其他職業 / 身分
         <input type="text" name="occupation_other">
       </label>
 
@@ -176,6 +203,10 @@ timeline.push({
         <label><input type="checkbox" name="related_background" value="none"> 無相關</label>
         <label><input type="checkbox" name="related_background" value="other"> 其他</label>
       </fieldset>
+
+      <label id="related-background-other-field" class="conditional-field" hidden>請填寫其他相關背景
+        <input type="text" name="related_background_other">
+      </label>
 
       <fieldset class="score-options">
         <legend>平時有遊玩電子遊戲或接觸 ACG（動漫/虛擬偶像/VTuber）文化的習慣</legend>
@@ -206,8 +237,8 @@ timeline.push({
   stimulus: `
     <section class="experiment-copy">
       <h2>前導情境</h2>
-      <p>Aethoria Infinite 是一家全球知名的娛樂科技公司，旗下擁有熱門的「賽博龐克動作遊戲」、「奇幻 MMORPG」與「AI 虛擬偶像」。</p>
-      <p>想像您是一位正在使用該公司旗下產品的用戶，您對公司即將舉辦的虛擬演唱會活動有些疑問，因此 尋求客服協助。接下來，您將會看到與該客服的對話紀錄……</p>
+      <p><strong>Aethoria Infinite</strong> 是一家全球知名的<strong>娛樂科技公司</strong>，旗下擁有熱門的「<strong>賽博龐克動作遊戲</strong>」、「<strong>奇幻 MMORPG</strong>」與「<strong>AI 虛擬偶像</strong>」。</p>
+      <p>想像您是一位正在<strong>使用該公司旗下產品的用戶</strong>，您對公司即將舉辦的<strong>虛擬演唱會活動</strong>有些疑問，因此 <strong>尋求客服協助</strong>。接下來，您將會看到與該客服的<strong>對話紀錄</strong>……</p>
     </section>
   `,
   choices: ["下一步"],
