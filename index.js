@@ -7,7 +7,7 @@ var jsPsych = initJsPsych({
 
     var displayElement = jsPsych.getDisplayElement();
     displayElement.innerHTML = `
-      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; color: #e0e0e0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; color: #888; font-family: 'Helvetica Neue', Arial, sans-serif;">
         <h1 style="color: #00e5ff; margin-bottom: 10px;">✅ 資料已成功送出！</h1>
         <p style="font-size: 18px; margin-bottom: 10px;">非常感謝您的參與，您的回覆對本研究非常有幫助。</p>
         <div style="margin-top: 20px; padding: 15px 30px; background-color: #2b2b30; border-radius: 8px; border: 1px solid #444;">
