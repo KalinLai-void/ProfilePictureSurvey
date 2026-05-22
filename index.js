@@ -8,7 +8,7 @@ var jsPsych = initJsPsych({
     var displayElement = jsPsych.getDisplayElement();
     displayElement.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; color: #888; font-family: 'Helvetica Neue', Arial, sans-serif;">
-        <h1 style="color: #00e5ff; margin-bottom: 10px;">✅ 資料已成功送出！</h1>
+        <h1 style="color: #00e5ff; margin-bottom: 10px;">資料已成功送出！</h1>
         <p style="font-size: 18px; margin-bottom: 10px;">非常感謝您的參與，您的回覆對本研究非常有幫助。</p>
         <div style="margin-top: 20px; padding: 15px 30px; background-color: #2b2b30; border-radius: 8px; border: 1px solid #444;">
           <p style="color: #fff; font-size: 16px; margin: 0;">您現在可以安全地關閉此網頁分頁。</p>
@@ -205,7 +205,6 @@ timeline.push({
           <option value="">請選擇</option>
           <option value="male">男性</option>
           <option value="female">女性</option>
-          <option value="other">其他 / 不想透露</option>
         </select>
       </label>
 
@@ -280,7 +279,7 @@ timeline.push({
   stimulus: `
     <section class="experiment-copy">
       <h2>前導情境</h2>
-      <p><strong>Aethoria Infinite</strong> 是一家全球知名的<strong>娛樂科技公司</strong>，旗下擁有熱門的「<strong>賽博龐克動作遊戲</strong>」、「<strong>奇幻 MMORPG</strong>」與「<strong>AI 虛擬偶像</strong>」。</p>
+      <p><img class="chat-avatar" src="${imgLogo}" alt="LOGO"><strong>Aethoria Infinite</strong> 是一家全球知名的<strong>娛樂科技公司</strong>，旗下擁有熱門的「<strong>賽博龐克動作遊戲</strong>」、「<strong>奇幻 MMORPG</strong>」與「<strong>AI 虛擬偶像</strong>」。</p>
       <p>想像您是一位正在<strong>使用該公司旗下產品的用戶</strong>，您對公司即將舉辦的<strong>虛擬演唱會活動</strong>有些疑問，因此 <strong>尋求客服協助</strong>。接下來，您將會看到與該客服的<strong>對話紀錄</strong>……</p>
     </section>
   `,
@@ -370,7 +369,7 @@ timeline.push({
     <div class="stimulus-frame">
       <img src="${chatNoAvatar}" alt="沒頭貼的對話內容">
     </div>
-    <p>請觀看對話內容，並填寫以下實驗設計的量表</p>
+    <p>請觀看對話內容，並填寫以下問題</p>
   `,
   questions: withScale(noAvatarScaleQuestions),
   button_label: "下一步",
@@ -393,7 +392,7 @@ timeline.push({
       <img class="chat-layout" src="${chatWithAvatar}" alt="有頭貼的對話內容">
       <img class="chat-avatar" src="${selectedAvatar}" alt="客服頭貼">
     </div>
-    <p>請觀看對話內容，並填寫以下實驗設計的量表</p>
+    <p>請觀看對話內容，並填寫以下問題</p>
   `,
   questions: withScale(avatarScaleQuestions),
   button_label: "下一步",
@@ -613,7 +612,6 @@ timeline.push({
       <h2 style="color: #2563eb; font-size: 24px; margin-bottom: 16px;">問卷填寫完畢</h2>
       <p style="margin-bottom: 8px;">感謝您的填答，您已完成所有問卷內容。</p>
       <p style="margin-bottom: 8px;">請按下下方按鈕送出資料並結束問卷。</p>
-      <p style="color: #6b7280; font-size: 14px; margin-top: 16px;">送出後若畫面變空白，代表資料已成功送出，您可以安心關閉此頁面。</p>
     </section>
   `,
   choices: ["送出並結束問卷"],
