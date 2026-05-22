@@ -279,8 +279,12 @@ timeline.push({
   stimulus: `
     <section class="experiment-copy">
       <h2>前導情境</h2>
+      
+      <div class="logo-block">
+        <img class="scenario-logo" src="${imgLogo}" alt="LOGO">
+      </div>
+      
       <p>
-        <img class="inline-logo" src="${imgLogo}" alt="LOGO">
         <strong>Aethoria Infinite</strong> 是一家全球知名的<strong>娛樂科技公司</strong>，旗下擁有熱門的「<strong>賽博龐克動作遊戲</strong>」、「<strong>奇幻 MMORPG</strong>」與「<strong>AI 虛擬偶像</strong>」。
       </p>
       <p>

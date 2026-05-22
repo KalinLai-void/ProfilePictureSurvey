@@ -637,3 +637,38 @@ textarea {
   font-size: 16px;
   margin: 0;
 }
+
+/* ==========================================
+   4. 送出確認頁面專用排版
+========================================== */
+.completion-screen {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.completion-screen h2 {
+  color: var(--accent); /* 自動套用你定義的藍色變數，或是維持 #2563eb */
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.completion-screen p {
+  margin-bottom: 8px;
+}
+/* ==========================================
+   5. 前導情境頁面 LOGO 置中與放大設定
+========================================== */
+.logo-block {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 25px; /* 與下方文字段落保持足夠間距 */
+}
+
+.scenario-logo {
+  width: 80px;         /* 放大後的寬度，可依視覺效果自由調整數值 */
+  height: 80px;        /* 放大後的高度 */
+  object-fit: cover;
+  border-radius: 12px; /* 隨著圖片變大，圓角也微調得更圓潤 */
+  box-shadow: var(--shadow); /* 帶入你原有的陰影變數，增加立體感 */
+  display: inline-block;
+}
