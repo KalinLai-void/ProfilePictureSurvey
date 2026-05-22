@@ -183,14 +183,12 @@ timeline.push({
   data: { stage: "no_avatar_rating", avatar_condition: "none" },
 });
 
-var selectedAvatarGroup = jsPsych.randomization.sampleWithoutReplacement(
-  Object.keys(avatarPools),
+var selectedAvatarItem = jsPsych.randomization.sampleWithoutReplacement(
+  allAvatars,
   1,
 )[0];
-var selectedAvatar = jsPsych.randomization.sampleWithoutReplacement(
-  avatarPools[selectedAvatarGroup],
-  1,
-)[0];
+var selectedAvatarGroup = selectedAvatarItem.group;
+var selectedAvatar = selectedAvatarItem.path;
 
 timeline.push({
   type: jsPsychSurveyLikert,
@@ -233,24 +231,28 @@ timeline.push({
 });
 
 function pickRankingImages() {
-  var validSample = null;
+  var groups = jsPsych.randomization.shuffle(Object.keys(avatarPools));
+  var doubledGroup = groups[0];
+  var selectedItems = [];
 
-  while (!validSample) {
-    var sample = jsPsych.randomization.sampleWithoutReplacement(allAvatars, 4);
-    var counts = sample.reduce(function (result, item) {
-      result[item.group] = (result[item.group] || 0) + 1;
-      return result;
-    }, {});
+  groups.forEach(function (group) {
+    var available = avatarPools[group]
+      .filter(function (path) {
+        return path !== selectedAvatar;
+      })
+      .map(function (path) {
+        return { path: path, group: group, label: groupLabels[group] };
+      });
 
-    var maxCount = Math.max.apply(null, Object.values(counts));
-    if (maxCount <= 2) {
-      validSample = sample;
-    }
-  }
+    var sampleSize = group === doubledGroup ? 2 : 1;
+    selectedItems = selectedItems.concat(
+      jsPsych.randomization.sampleWithoutReplacement(available, sampleSize),
+    );
+  });
 
   return jsPsych.randomization.shuffle(
     [{ path: imgLogo, group: "brand_logo", label: "品牌LOGO" }].concat(
-      validSample,
+      selectedItems,
     ),
   );
 }
