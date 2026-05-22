@@ -47,19 +47,6 @@ timeline.push(preload);
 // ==========================================
 // 1. 前導：情境說明與人口統計
 // ==========================================
-var intro_screen = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `
-        <h2>歡迎參與本研究</h2>
-        <p align="left" style="max-width: 600px; margin: 0 auto;">
-        Aethoria Infinite 是一家全球知名的娛樂科技公司，旗下擁有熱門的「賽博龐克動作遊戲」、「奇幻 MMORPG」與「AI 虛擬偶像」。<br><br>
-        想像您是一位正在使用該公司旗下產品的用戶，您對公司即將舉辦的虛擬演唱會活動有些疑問，因此尋求客服協助。接下來，您將會看到與該客服的對話紀錄……
-        </p><br>
-    `,
-  choices: ["開始實驗"],
-};
-timeline.push(intro_screen);
-
 var stage1_demographics = {
   type: jsPsychSurveyHtmlForm,
   preamble: "<h3>第一階段：基本資料</h3>",
@@ -75,6 +62,19 @@ var stage1_demographics = {
     `,
 };
 timeline.push(stage1_demographics);
+
+var intro_screen = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+        <h2>歡迎參與本研究</h2>
+        <p align="left" style="max-width: 600px; margin: 0 auto;">
+        Aethoria Infinite 是一家全球知名的娛樂科技公司，旗下擁有熱門的「賽博龐克動作遊戲」、「奇幻 MMORPG」與「AI 虛擬偶像」。<br><br>
+        想像您是一位正在使用該公司旗下產品的用戶，您對公司即將舉辦的虛擬演唱會活動有些疑問，因此尋求客服協助。接下來，您將會看到與該客服的對話紀錄……
+        </p><br>
+    `,
+  choices: ["開始實驗"],
+};
+timeline.push(intro_screen);
 
 // ==========================================
 // 2. 階段二：無頭貼對話與量表
@@ -125,19 +125,20 @@ var questions_no_avatar = [
   },
 ];
 
-var stage2_chat = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `<h3>第二階段</h3><p>請閱讀以下客服對話紀錄（目前系統無設置客服頭貼）：</p><img src="${chat_no_avatar}" style="max-width: 90vw; max-height: 50vh; border-radius: 8px;"><br>`,
-  choices: ["我已閱讀完畢，進入填答"],
-};
-timeline.push(stage2_chat);
-
-var stage2_survey = {
+var stage2_combined = {
   type: jsPsychSurveyLikert,
-  preamble: "請根據剛才的客服對話體驗，回答以下問題：",
+  preamble: `
+    <h3>第二階段</h3>
+    <p>請閱讀以下客服對話紀錄，並根據體驗回答下方問題：</p>
+    <div style="margin-bottom: 20px;">
+        <img src="${chat_no_avatar}" style="max-width: 80vw; max-height: 40vh; border: 1px solid #ddd; border-radius: 8px;">
+    </div>
+  `,
   questions: questions_no_avatar,
+  button_label: "送出",
 };
-timeline.push(stage2_survey);
+
+timeline.push(stage2_combined);
 
 // ==========================================
 // 3. 階段三：隨機有頭貼對話與完整量表
@@ -182,23 +183,21 @@ var random_group_idx = Math.floor(Math.random() * 3);
 var stage3_avatar =
   avatar_groups[random_group_idx][Math.floor(Math.random() * 3)];
 
-var stage3_chat = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `<h3>第三階段</h3><p>系統進行了更新，請閱讀以下帶有客服頭貼的對話紀錄：</p>
-               <div style="position:relative; display:inline-block;">
-                   <img src="${chat_with_avatar}" style="max-width: 90vw; max-height: 50vh; border-radius: 8px;">
-                   <img src="${stage3_avatar}" style="position:absolute; top:50px; left:20px; width:60px; height:60px; border-radius:50%;">
-               </div><br>`,
-  choices: ["我已閱讀完畢，進入填答"],
-};
-timeline.push(stage3_chat);
-
-var stage3_survey = {
+var stage3_combined = {
   type: jsPsychSurveyLikert,
-  preamble: "請根據剛才帶有「客服頭貼」的對話體驗，回答以下問題：",
+  preamble: `
+    <h3>第三階段</h3>
+    <p>系統進行了更新，請閱讀以下帶有客服頭貼的對話紀錄，並回答下方問題：</p>
+    <div style="position:relative; display:inline-block; margin-bottom: 20px;">
+        <img src="${chat_with_avatar}" style="max-width: 80vw; max-height: 40vh; border: 1px solid #ddd; border-radius: 8px;">
+        <img src="${stage3_avatar}" style="position:absolute; top:20px; left:10px; width:50px; height:50px; border-radius:50%; border: 2px solid white;">
+    </div>
+  `,
   questions: questions_full,
+  button_label: "送出",
 };
-timeline.push(stage3_survey);
+
+timeline.push(stage3_combined);
 
 // ==========================================
 // 4. 階段四：必要性提問與動態排序
@@ -243,63 +242,36 @@ while (!valid_combo) {
 var final_5_avatars = [img_logo, ...selected_4_avatars];
 final_5_avatars = jsPsych.randomization.shuffle(final_5_avatars);
 
-// 排序 1 (下拉選單版)
-var rank1_html = `
-    <p style="color:#A020F0; font-weight:bold;">【排序一：品牌契合度】</p>
-    <p>請為以下五個客服頭貼選擇名次（1 為最符合該品牌形象，5 為最不符合）。<br><span style="color:red; font-size:14px;">※ 請確認名次沒有重複選擇</span></p>
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
-`;
-final_5_avatars.forEach((img, idx) => {
-  rank1_html += `
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-            <select name="rank1_img_${idx}" required style="margin-top: 8px; padding: 5px;">
-                <option value="">選擇名次</option>
-                <option value="1">1 (最符合)</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5 (最不符合)</option>
-            </select>
-        </div>
-    `;
-});
-rank1_html += `</div>`;
-
+// 排序 1 拖曳版 (使用 SortableHtml 外掛)
 var stage4_rank1 = {
-  type: jsPsychSurveyHtmlForm,
-  html: rank1_html,
-  button_label: "下一題",
+  type: jsPsychSortableHtml,
+  stimulus: `
+        <p style="color:#A020F0; font-weight:bold;">【排序一：品牌契合度】</p>
+        <p>請將以下圖片拖曳排序（最符合放最上方）：</p>
+    `,
+  button_label: "確認排序",
+  options: final_5_avatars.map(
+    (img, idx) =>
+      `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
+  ),
+  on_finish: function (data) {
+    // Cognition.run 會自動記錄 data.order，即為排序後的陣列索引
+  },
 };
 timeline.push(stage4_rank1);
 
-// 排序 2 (下拉選單版)
-var rank2_html = `
-    <p style="color:#00FFFF; font-weight:bold; background-color:#333; display:inline-block; padding:5px;">【排序二：安心與信任感】</p>
-    <p>想像您遇到了緊急問題需要協助。請為以下五個客服頭貼選擇名次（1 為最能感到安心，5 為最不安心）。<br><span style="color:red; font-size:14px;">※ 請確認名次沒有重複選擇</span></p>
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
-`;
-final_5_avatars.forEach((img, idx) => {
-  rank2_html += `
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-            <select name="rank2_img_${idx}" required style="margin-top: 8px; padding: 5px;">
-                <option value="">選擇名次</option>
-                <option value="1">1 (最安心)</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5 (最不安心)</option>
-            </select>
-        </div>
-    `;
-});
-rank2_html += `</div>`;
-
+// 排序 2 拖曳版
 var stage4_rank2 = {
-  type: jsPsychSurveyHtmlForm,
-  html: rank2_html,
+  type: jsPsychSortableHtml,
+  stimulus: `
+        <p style="color:#00FFFF; font-weight:bold; background-color:#333; display:inline-block; padding:5px;">【排序二：安心與信任感】</p>
+        <p>請將以下圖片拖曳排序（最讓您感到安心放最上方）：</p>
+    `,
   button_label: "完成送出",
+  options: final_5_avatars.map(
+    (img, idx) =>
+      `<img src="${img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">`,
+  ),
 };
 timeline.push(stage4_rank2);
 
