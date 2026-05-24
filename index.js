@@ -20,6 +20,14 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
+// ==========================================
+// 動態替換網頁標籤頁的 Icon 與標題
+// ==========================================
+(function customizeBrowserTab() {
+  // 更改網頁標題
+  document.title = "客服頭像研究實驗問卷";
+})();
+
 var jsPsych = initJsPsych({
   show_progress_bar: true,
   auto_update_progress_bar: true,
