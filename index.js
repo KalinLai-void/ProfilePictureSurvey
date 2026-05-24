@@ -259,8 +259,8 @@ timeline.push({
         非常感謝您的協助！
       </p>
       <p>若對本實驗有任何問題請聯絡</br>
-        國立臺灣科技大學 資訊工程系碩士班 賴冠綸 M11315207@gapps.ntust.edu.tw</br>
-        國立臺灣科技大學 設計系系碩士班 盧姳儒 M11110308@gapps.ntust.edu.tw
+        國立臺灣科技大學 資訊工程系碩士班 賴冠綸 M11315207@mail.ntust.edu.tw</br>
+        國立臺灣科技大學 設計系系碩士班 盧姳儒 M11110308@mail.ntust.edu.tw
       </p>
     </section>
   `,
