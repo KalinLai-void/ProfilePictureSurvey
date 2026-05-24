@@ -467,9 +467,9 @@ timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
     <div class="stimulus-frame">
-      <img src="${chatNoAvatar}" alt="沒頭貼的對話內容">
+      <img src="${chatNoAvatar}" alt="無頭貼的對話內容">
     </div>
-    <p>請觀看對話內容，並填寫以下問題</p>
+    <p>請觀看對話內容，並填寫以下問題：</p>
   `,
   questions: withScale(noAvatarScaleQuestions),
   button_label: "下一步",
@@ -492,7 +492,7 @@ timeline.push({
       <img class="chat-avatar1" src="${selectedAvatar}" alt="客服頭貼">
       <img class="chat-avatar2" src="${selectedAvatar}" alt="客服頭貼">
     </div>
-    <p>請觀看對話內容，並填寫以下問題</p>
+    <p>請觀看對話內容，並填寫以下問題：</p>
   `,
   questions: withScale(avatarScaleQuestions),
   button_label: "下一步",

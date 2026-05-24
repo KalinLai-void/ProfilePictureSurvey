@@ -491,7 +491,7 @@ textarea {
 @media (min-width: 761px) {
   .stimulus-frame,
   .chat-composite {
-    max-width: min(840px, calc((100vh - 300px) * 0.6106));
+    max-width: 620px;
   }
 }
 
