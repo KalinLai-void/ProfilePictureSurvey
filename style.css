@@ -273,16 +273,29 @@ textarea {
   position: relative;
 }
 
-.chat-avatar {
+.chat-avatar1 {
   background: #fff;
-  border: 3px solid #fff;
-  border-radius: 50%;
+  /*border: 3px solid #fff;
+  border-radius: 50%;*/
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24);
   height: 56px;
   left: 16px;
   object-fit: cover;
   position: absolute;
   top: 16px;
+  width: 56px;
+}
+
+.chat-avatar2 {
+  background: #fff;
+  /*border: 3px solid #fff;
+  border-radius: 50%;*/
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24);
+  height: 56px;
+  left: 16px;
+  object-fit: cover;
+  position: absolute;
+  top: 100px;
   width: 56px;
 }
 
