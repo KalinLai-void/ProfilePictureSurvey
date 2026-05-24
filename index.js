@@ -701,7 +701,7 @@ timeline.push({
       </label>
 
       <fieldset class="binary-options">
-        <legend>我確定整份問卷我是亂填，且填了不止一次（請選否已證明）</legend>
+        <legend>這題請選否，以證明自己本問卷不是亂填且只填寫過一次</legend>
         <label><input type="radio" name="avatar_necessity" value="yes"> 是</label>
         <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
       </fieldset>
