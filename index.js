@@ -64,8 +64,8 @@ jsPsych.data.addProperties({
 // ------------------------
 
 var imgLogo = "images/logo.jpg";
-var chatNoAvatar = "images/chat_layout_none.jpg";
-var chatWithAvatar = "images/chat_layout_avatar.jpg";
+var chatNoAvatar = "images/chat_layout_none.png";
+var chatWithAvatar = "images/chat_layout_avatar.png";
 
 var avatarPools = {
   mascot: [
