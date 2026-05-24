@@ -5,7 +5,7 @@ document.addEventListener("contextmenu", function (e) {
   e.preventDefault(); // 阻擋按右鍵跳出選單
 });
 
-document.addEventListener("keydown", function (e) {
+/*document.addEventListener("keydown", function (e) {
   // 阻擋 F12 (開啟開發者工具)
   if (e.key === "F12") {
     e.preventDefault();
@@ -18,7 +18,7 @@ document.addEventListener("keydown", function (e) {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
     e.preventDefault();
   }
-});
+});*/
 
 // ==========================================
 // 動態替換網頁標籤頁的 Icon 與標題
@@ -491,7 +491,8 @@ timeline.push({
     <h2>有頭貼對話內容</h2>
     <div class="chat-composite">
       <img class="chat-layout" src="${chatWithAvatar}" alt="有頭貼的對話內容">
-      <img class="chat-avatar" src="${selectedAvatar}" alt="客服頭貼">
+      <img class="chat-avatar1" src="${selectedAvatar}" alt="客服頭貼">
+      <img class="chat-avatar2" src="${selectedAvatar}" alt="客服頭貼">
     </div>
     <p>請觀看對話內容，並填寫以下問題</p>
   `,
