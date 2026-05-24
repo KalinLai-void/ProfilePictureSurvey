@@ -271,32 +271,31 @@ textarea {
 .chat-composite {
   display: inline-block;
   position: relative;
+  width: min(840px, 100%);
+}
+
+.chat-layout {
+  width: 100%;
+}
+
+.chat-avatar1,
+.chat-avatar2 {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24);
+  height: auto;
+  left: 4.1667%;
+  object-fit: cover;
+  position: absolute;
+  width: 10.7143%;
 }
 
 .chat-avatar1 {
-  background: #fff;
-  /*border: 3px solid #fff;*/
-  border-radius: 50%;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24);
-  height: 90px;
-  left: 35px;
-  object-fit: cover;
-  position: absolute;
-  top: 25px;
-  width: 90px;
+  top: 1.8173%;
 }
 
 .chat-avatar2 {
-  background: #fff;
-  /*border: 3px solid #fff;*/
-  border-radius: 50%;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24);
-  height: 90px;
-  left: 35px;
-  object-fit: cover;
-  position: absolute;
-  top: 675px;
-  width: 90px;
+  top: 49.0658%;
 }
 
 .jspsych-survey-likert-preamble,
@@ -571,12 +570,6 @@ textarea {
     min-width: 0;
   }
 
-  .chat-avatar {
-    height: 46px;
-    left: 10px;
-    top: 10px;
-    width: 46px;
-  }
 }
 
 /* ==========================================
