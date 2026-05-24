@@ -266,16 +266,13 @@ textarea {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+  width: 100%;
 }
 
 .chat-composite {
-  display: inline-block;
+  display: block;
   position: relative;
   width: min(840px, 100%);
-}
-
-.chat-layout {
-  width: 100%;
 }
 
 .chat-avatar1,
@@ -489,6 +486,13 @@ textarea {
 
 .ranking-row select {
   min-width: 142px;
+}
+
+@media (min-width: 761px) {
+  .stimulus-frame,
+  .chat-composite {
+    max-width: min(840px, calc((100vh - 300px) * 0.6106));
+  }
 }
 
 @media (max-width: 760px) {

@@ -466,7 +466,6 @@ function withScale(questions) {
 timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
-    <h2>無頭貼對話內容</h2>
     <div class="stimulus-frame">
       <img src="${chatNoAvatar}" alt="沒頭貼的對話內容">
     </div>
@@ -488,7 +487,6 @@ var selectedAvatar = selectedAvatarItem.path;
 timeline.push({
   type: jsPsychSurveyLikert,
   preamble: `
-    <h2>有頭貼對話內容</h2>
     <div class="chat-composite">
       <img class="chat-layout" src="${chatWithAvatar}" alt="有頭貼的對話內容">
       <img class="chat-avatar1" src="${selectedAvatar}" alt="客服頭貼">

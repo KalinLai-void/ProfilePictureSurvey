@@ -22,7 +22,28 @@ test("the chat image establishes the responsive coordinate system", function () 
   const layout = rule(".chat-layout");
 
   assert.match(composite, /width:\s*min\(840px,\s*100%\)/);
+  assert.match(composite, /display:\s*block/);
   assert.match(layout, /width:\s*100%/);
+});
+
+test("desktop images are centered and height-limited without shrinking mobile images", function () {
+  const frameAndComposite = rule(".stimulus-frame,\n.chat-composite");
+  const images = rule(".stimulus-frame img,\n.chat-layout");
+  const desktopMedia = css.match(
+    /@media\s*\(min-width:\s*761px\)\s*\{([\s\S]*?)\n\}/,
+  );
+
+  assert.match(frameAndComposite, /margin:\s*8px auto 28px/);
+  assert.match(images, /width:\s*100%/);
+  assert.ok(desktopMedia, "Expected a desktop-only media query");
+  assert.match(
+    desktopMedia[1],
+    /max-width:\s*min\(840px,\s*calc\(\(100vh - 300px\) \* 0\.6106\)\)/,
+  );
+  assert.doesNotMatch(
+    css.match(/@media\s*\(max-width:\s*760px\)\s*\{([\s\S]*?)\n\}/)[1],
+    /calc\(\(100vh - 300px\)/,
+  );
 });
 
 test("both avatars scale and remain positioned relative to the chat image", function () {
