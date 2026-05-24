@@ -232,7 +232,8 @@ input[type="checkbox"] {
 select,
 textarea,
 input[type="number"],
-input[type="text"] {
+input[type="text"],
+input[type="email"] {
   background: var(--input);
   border: 1px solid var(--border-strong);
   border-radius: 7px;
@@ -664,6 +665,29 @@ textarea {
 
 .completion-screen p {
   margin-bottom: 8px;
+}
+
+.completion-contact {
+  display: grid;
+  gap: 10px;
+  margin: 24px auto;
+  max-width: 480px;
+  text-align: left;
+  width: min(100%, 480px);
+}
+
+.completion-contact label {
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.completion-screen .completion-note {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+  margin: 0;
 }
 /* ==========================================
    5. 前導情境頁面 LOGO 置中與放大設定

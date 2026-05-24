@@ -244,6 +244,31 @@ timeline.push({
 });
 
 timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <section class="experiment-copy">
+      <h2>實驗目的與說明</h2>
+      
+      <p>您好，我們是修習<strong>臺灣師範大學設計系課程「設計心理學」</strong>的學生，目前正在進行期末報告的研究數據蒐集。</p>
+      <p>本研究主要想<strong>探討使用者在使用客服系統時對頭像的感受</strong>，使用的是虛構品牌「Aethoria Infinite」，並設計一個情境作為實驗環境。</p>
+      <p>整份問卷填寫<strong>約需 5 分鐘</strong>，問卷沒有標準答案，請依照自己的第一直覺與實際感受作答即可。</p>
+      <p>本研究所有資料僅供學術研究使用，不會公開任何個人資訊。若您選擇留下 E-mail 參加抽獎，聯絡方式將隨本次填答資料一同儲存，僅供抽獎聯絡使用；未留下 E-mail 者則以不記名方式蒐集。</p>
+      <p>本實驗將會在所有填答者中<strong>抽選 1 位提供現金 200 元作為回饋</strong>，若需抽獎請在問卷中留下您的聯絡方式，後續若中獎將透過 E-mail 聯絡中獎者。</p>
+      <p>
+        若您同意參與本研究，請點擊下方「下一步」開始作答。</br>
+        非常感謝您的協助！
+      </p>
+      <p>若對本實驗有任何問題請聯絡
+        國立臺灣科技大學 資訊工程系碩士班 賴冠綸 M11315207@gapps.ntust.edu.tw
+        國立臺灣科技大學 設計系系碩士班 盧姳儒 M11110308@gapps.ntust.edu.tw
+      </p>
+    </section>
+  `,
+  choices: ["下一步"],
+  data: { stage: "description_intro" },
+});
+
+timeline.push({
   type: jsPsychSurveyHtmlForm,
   preamble: "<h2>基本資料</h2>",
   html: `
@@ -675,16 +700,28 @@ timeline.push({
 });
 
 timeline.push({
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `
+  type: jsPsychSurveyHtmlForm,
+  html: `
     <section class="completion-screen">
       <h2>問卷填寫完畢</h2>
       <p>感謝您的填答，您已完成所有問卷內容。</p>
+      <div class="completion-contact">
+        <label for="lottery-email">抽獎聯絡 Email（選填）</label>
+        <input
+          id="lottery-email"
+          type="email"
+          name="lottery_email"
+          autocomplete="email"
+          placeholder="name@example.com"
+        >
+        <p class="completion-note">若您願意參加抽獎，請留下電子郵件。Email 將與本次填答資料一同儲存，僅供抽獎聯絡使用；不填不影響完成問卷。</p>
+      </div>
       <p>請按下下方按鈕送出資料並結束問卷。</p>
     </section>
   `,
-  choices: ["送出並結束問卷"],
+  button_label: "送出並結束問卷",
   data: { stage: "completion_confirmation" },
+  on_finish: flattenResponseData,
 });
 
 jsPsych.run(timeline);
