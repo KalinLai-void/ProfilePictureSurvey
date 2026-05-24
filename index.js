@@ -5,7 +5,7 @@ document.addEventListener("contextmenu", function (e) {
   e.preventDefault(); // 阻擋按右鍵跳出選單
 });
 
-/*document.addEventListener("keydown", function (e) {
+document.addEventListener("keydown", function (e) {
   // 阻擋 F12 (開啟開發者工具)
   if (e.key === "F12") {
     e.preventDefault();
@@ -18,7 +18,7 @@ document.addEventListener("contextmenu", function (e) {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
     e.preventDefault();
   }
-});*/
+});
 
 // ==========================================
 // 動態替換網頁標籤頁的 Icon 與標題
@@ -261,7 +261,7 @@ timeline.push({
       <p>本研究主要想<strong>探討使用者在使用客服系統時對頭像的感受</strong>，使用的是虛構品牌「Aethoria Infinite」，並設計一個情境作為實驗環境。</p>
       <p>整份問卷填寫<strong>約需 5 分鐘</strong>，問卷沒有標準答案，請依照自己的第一直覺與實際感受作答即可。</p>
       <p>本研究所有資料僅供學術研究使用，不會公開任何個人資訊。</p>
-      <p>本實驗將會在所有填答者中<strong>抽選 1 位提供現金 200 元作為回饋</strong>，若需抽獎請在問卷中留下您的聯絡方式，後續若中獎將透過 E-mail 聯絡中獎者。</p>
+      <p>本實驗將會在<strong>所有填答者中抽選 1 位提供現金 200 元作為回饋</strong>，若需抽獎請在問卷中留下您的聯絡方式，後續若中獎將透過 E-mail 聯絡中獎者。</p>
       <p>
         若您同意參與本研究，請點擊下方「下一步」開始作答。</br>
         非常感謝您的協助！
@@ -699,6 +699,12 @@ timeline.push({
       <label>請說明你將不同客服/聊天機器人的頭貼進行排序時的考量因素，例如親切感、信任感、專業感、品牌契合度或其他原因。（非必填）
         <textarea name="avatar_ranking_reason" rows="4"></textarea>
       </label>
+
+      <fieldset class="binary-options">
+        <legend>我確定整份問卷我是亂填，且填了不止一次（請選否已證明）</legend>
+        <label><input type="radio" name="avatar_necessity" value="yes"> 是</label>
+        <label><input type="radio" name="avatar_necessity" value="no"> 否</label>
+      </fieldset>
     </div>
   `,
   button_label: "下一步",
