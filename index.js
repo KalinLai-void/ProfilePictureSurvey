@@ -64,27 +64,27 @@ jsPsych.data.addProperties({
 // ------------------------
 
 var imgLogo = "images/logo.jpg";
-var chatNoAvatar = "images/chat_layout_none.png";
-var chatWithAvatar = "images/chat_layout_avatar.png";
+var chatNoAvatar = "images/chat_layout_none.jpg";
+var chatWithAvatar = "images/chat_layout_avatar.jpg";
 
 var avatarPools = {
   mascot: [
-    "images/mascot/mascot_1.png",
-    "images/mascot/mascot_2.png",
-    "images/mascot/mascot_3.png",
-    "images/mascot/mascot_4.png",
+    "images/mascot/mascot_1.jpg",
+    "images/mascot/mascot_2.jpg",
+    "images/mascot/mascot_3.jpg",
+    "images/mascot/mascot_4.jpg",
   ],
   virtual: [
-    "images/virtual/virtual_1.png",
-    "images/virtual/virtual_2.png",
-    "images/virtual/virtual_3.png",
-    "images/virtual/virtual_4.png",
+    "images/virtual/virtual_1.jpg",
+    "images/virtual/virtual_2.jpg",
+    "images/virtual/virtual_3.jpg",
+    "images/virtual/virtual_4.jpg",
   ],
   human: [
-    "images/human/human_1.png",
-    "images/human/human_2.png",
-    "images/human/human_3.png",
-    "images/human/human_4.png",
+    "images/human/human_1.jpg",
+    "images/human/human_2.jpg",
+    "images/human/human_3.jpg",
+    "images/human/human_4.jpg",
   ],
 };
 
