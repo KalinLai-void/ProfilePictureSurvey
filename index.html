@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>問卷載入中...</title>
+  <script>
+    // 這裡放你建好的 4 個 Cognition.run Task 網址
+    var taskUrls = [
+      "https://xfx6delqzf.cognition.run",
+      "https://a1duy7nqlu.cognition.run",
+      "https://89dzwopthp.cognition.run",
+    ];
+
+    // 隨機抽取一個網址 (0 到 3)
+    var randomIndex = Math.floor(Math.random() * taskUrls.length);
+    var targetUrl = taskUrls[randomIndex];
+
+    // 使用 replace() 進行轉址
+    // 好處是：受試者按瀏覽器的「上一頁」時，不會退回這個轉址頁面又被重新分發
+    window.location.replace(targetUrl);
+  </script>
+</head>
+<body style="background-color: #f4f6f8; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: #4b5563;">
+  <p>正在將您導向問卷系統，請稍候...</p>
+</body>
+</html>
